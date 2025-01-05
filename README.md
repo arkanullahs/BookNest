@@ -26,7 +26,7 @@ Your BookNest app targets book enthusiasts of all ages who seek a seamless way t
 - **Framework**: Laravel
 
 ### Frontend
-- **Framework/Library**: React with Inertia.js
+- **Framework/Library**: React with React.js
 
 ### Rendering Method
 - **Client-Side Rendering (CSR)**
