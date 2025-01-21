@@ -26,14 +26,14 @@ Your BookNest app targets book enthusiasts of all ages who seek a seamless way t
 - **Framework**: Laravel
 
 ### Frontend
-- **Framework/Library**: React with Inertia.js
+- **Framework/Library**: React with React.js
 
 ### Rendering Method
 - **Client-Side Rendering (CSR)**
 
 ### **UI Design**
 - **Tool**: Figma  
-- **Design Link**:  [CourseMate Figma Design](https://www.figma.com/design/e5Tw6PEv3NbnbzRr3ZpF5h/Book-eCommerce-Website-(Community)?node-id=0-1&p=f&t=DYjZQ963hzW0DqWx-0)
+- **Design Link**:  [BookNest Figma Design](https://www.figma.com/design/e5Tw6PEv3NbnbzRr3ZpF5h/Book-eCommerce-Website-(Community)?node-id=0-1&p=f&t=DYjZQ963hzW0DqWx-0)
   
   ```bash
   https://www.figma.com/design/e5Tw6PEv3NbnbzRr3ZpF5h/Book-eCommerce-Website-(Community)?node-id=0-1&p=f&t=DYjZQ963hzW0DqWx-0
@@ -48,6 +48,10 @@ Project Features for BookNest Website
 - Registration and login for personalized browsing and shopping.
 - Option for social media login.
 
+**My Profile**
+- User Dashboard: Buyers can view and edit their profile, manage their order history, wishlist, and personal information.
+- Publisher/Admin Dashboard: Publishers and admins have a dashboard to manage products, track sales, and perform administrative tasks
+
 **Comprehensive Book Search**
 
  - Search books by title, author, genre, or ISBN.
@@ -58,87 +62,77 @@ Project Features for BookNest Website
  - Add books to your cart for easy checkout.
  - Save favorite items to a wishlist for future purchases.
 
- **Secure Payment Options**
-
- - Support for cash-on-delivery, mobile payments, and credit/debit cards.
- - Integration with trusted payment gateways.
 
  **User Reviews & Ratings**
 
  - Leave reviews and ratings for purchased books.
  - Read feedback from verified buyers.
 
-**Order Tracking & Notifications**
+**Forum Page**
 
- - Real-time updates on order status and delivery tracking.
- - Notifications for discounts, new arrivals, and offers.
+- Provides a platform for users and publishers to communicate, resolve issues, and share feedback about books and reletives.
 
 
 ## API Endpoints
 
+API Endpoints
 Authentication
-POST /register: User registration.
-POST /login: User login.
-POST /logout: Logout the authenticated user.
+POST /user/register: Register a new buyer/user.
+POST /publisher/register: Register a new publisher/admin.
+POST /login: User or admin login.
+POST /logout: Logout the authenticated user or admin.
 
-Books
-GET /books: Fetch all books.
-GET /books/{id}: Fetch details of a specific book.
-POST /books: Add a new book (Admin only).
-PUT /books/{id}: Update a book (Admin only).
-DELETE /books/{id}: Delete a book (Admin only).
+Profile
+GET /profile: Fetch the authenticated user's profile details.
+PUT /profile: Update profile details for a buyer or publisher.
 
-Categories
-GET /categories: Fetch all book categories.
-POST /categories: Create a new category (Admin only).
-PUT /categories/{id}: Update a category (Admin only).
-DELETE /categories/{id}: Delete a category (Admin only).
+Administration
+GET /admin/products: Fetch all products listed by the admin/publisher.
+POST /admin/products: Add a new product (Admin only).
+PUT /admin/products/{id}: Update product details (Admin only).
+DELETE /admin/products/{id}: Delete a product (Admin only).
+GET /admin/sales: Fetch product sales information (Admin only).
 
-Cart
-GET /cart: Fetch items in the user's cart.
-POST /cart: Add a book to the cart.
-DELETE /cart/{id}: Remove a book from the cart.
+Home Page
+GET /products: Fetch all available products.
+GET /products/{id}: Fetch detailed information for a specific product.
 
-Wishlist
-GET /wishlist: Fetch all items in the user's wishlist.
-POST /wishlist: Add a book to the wishlist.
-DELETE /wishlist/{id}: Remove a book from the wishlist.
+Product Page
+GET /products/{id}/reviews: Fetch reviews for a specific product.
+POST /products/{id}/reviews: Add a review for a product.
+GET /products/{id}/comments: Fetch comments on a specific product.
+POST /products/{id}/comments: Add a comment on a product.
 
-Reviews
-GET /reviews/{bookId}: Fetch reviews for a specific book.
-POST /reviews/{bookId}: Add a review for a book.
-PUT /reviews/{id}: Update a review.
-DELETE /reviews/{id}: Delete a review.
-
-Orders
-GET /orders: Fetch all orders for the authenticated user.
-POST /orders: Place a new order.
-GET /orders/{id}: Fetch details of a specific order.
+Forum Page
+GET /forum: Fetch all forum discussions.
+POST /forum: Create a new discussion or question.
+GET /forum/{id}: Fetch details of a specific discussion.
+POST /forum/{id}/reply: Add a reply to a forum discussion.
 
 Miscellaneous
-GET /profile: Fetch the authenticated user's profile.
-PUT /profile: Update user profile details.
-POST /report: Report inappropriate content.
+POST /report: Report inappropriate content or activity.
 
 
 ## Milestones
 
 ### Milestone 1: Initial Setup and Basic Features
+
 - Set up Laravel backend and React frontend.
-- Implement user authentication (registration and login).
-- Create API endpoints for books and categories.
-- Basic UI for home page, book listing, and user account creation.
+- Implement user and publisher authentication (registration and login).
+- Create API endpoints for product management (add, update, delete).
+- Basic UI for sign-up pages, login page, and home page showcasing products.
 
-### Milestone 2: Shopping Features and Interactions
-- Implement search functionality with filters (genre, author, price).
-- Add shopping cart and wishlist features.
-- Enable secure payment integration (cash-on-delivery, mobile banking).
-- Build UI for product pages, cart, and checkout.
+### Milestone 2: Profile and Administration Features
+
+- Develop buyer/user profile page to manage personal details.
+- Implement publisher/admin page for managing products (add, edit, delete).
+- Create UI for sales information display in the admin panel.
+- Integrate review and comment features for the product page.
 
 
-### Milestone 3: Final Touches and Deployment
-- Implement user reviews and ratings system.
-- Add order tracking and notification system.
-- Develop admin panel for managing books, orders, and reviews.
-- Complete testing and bug fixes.
-- Deploy the platform to a live hosting environment.
+
+### Milestone 3: Forum and Finalization
+
+- Build a forum page to enable communication between users and admins.
+- Add features for replying to discussions and managing forum posts.
+- Complete testing, bug fixes, and deploy the application to a live hosting environment.
