@@ -73,7 +73,7 @@
   
   .forgot-password a {
     font-size: 14px;
-    color: #007bff;
+    color: #1b2497;
     text-decoration: none;
   }
   
@@ -85,7 +85,7 @@
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    background-color: #752fb6;
+    background-color: #173370;
     color: white;
     border: none;
     border-radius: 4px;
@@ -93,7 +93,7 @@
   }
   
   .submit-btn:hover {
-    background-color: #5e2394;
+    background-color: #1b2497;
   }
   
   .toggle-text {
@@ -133,3 +133,6 @@
     opacity: 0.7;
   }
   
+  /* Navigation Bar */
+
+

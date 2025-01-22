@@ -1,0 +1,88 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d3d8df;
+    color: #090d0e;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure the navbar spans the entire width of the page */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-left {
+    flex: 1;
+  }
+  
+  .navbar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .navbar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .navbar-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 15px;
+  }
+  
+  .navbar-links li {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-links a {
+    color: #060808;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+  
+  .navbar-links a:hover {
+    color: #173370;
+  }
+  
+  .search-bar {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+  }
+  
+  .navbar-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .nav-btn {
+    background-color: #b7c2c9;
+    color: #0c0707;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-btn:hover {
+    background-color: #173370;
+  }
+  
+  /* Add some margin for the content below the navbar to prevent overlap */
+  .container {
+    margin-top: 70px; /* Adjust based on the height of your navbar */
+  }
