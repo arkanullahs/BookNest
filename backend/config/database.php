@@ -64,7 +64,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'options' => [
-                'TrustServerCertificate' => false,
+                'TrustServerCertificate' => true,
             ],
         ],
     ],

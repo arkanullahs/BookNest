@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS personal_access_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tokenable_type VARCHAR(255) NOT NULL,
+    tokenable_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    token VARCHAR(64) NOT NULL UNIQUE,
+    abilities TEXT,
+    last_used_at TIMESTAMP NULL,
+    expires_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
