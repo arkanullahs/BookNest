@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginSignup from './components/loginSignup.jsx';
+import SignupPage from './components/signup.jsx';
+
+const HomePage = () => {
+  return <h1>Welcome to the Home Page!</h1>;
+};
 
 function App() {
   return (
-    <div>
-      <LoginSignup />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginSignup />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </Router>
   );
 }
 
