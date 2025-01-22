@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
 
-
-// Public routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-// Protected routes
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [AuthController::class, 'getProfile']);
+// Fix the routes by using the fully qualified class name
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/register', 'register');
+    Route::post('/login', 'login');
+    
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', 'logout');
+        Route::get('/me', 'me');
+    });
 });

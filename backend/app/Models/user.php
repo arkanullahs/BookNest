@@ -25,6 +25,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // Add this to explicitly declare timestamp columns
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+
+    // Specify the date format for SQL Server
+    protected $dateFormat = 'Y-m-d H:i:s.v';
+
     public function role()
     {
         return $this->belongsTo(Role::class);
