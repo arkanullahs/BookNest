@@ -1,10 +1,15 @@
-CREATE TABLE IF NOT EXISTS roles (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='roles' and xtype='U')
+CREATE TABLE roles (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(50) NOT NULL,
+    created_at DATETIME DEFAULT GETDATE()
 );
 
-INSERT INTO roles (name) VALUES 
-    ('user'),      -- regular user/buyer
-    ('publisher'), -- publisher
-    ('admin');     -- admin
+-- Insert default roles if not exist
+IF NOT EXISTS (SELECT * FROM roles)
+BEGIN
+    INSERT INTO roles (name) VALUES 
+        ('user'),
+        ('publisher'),
+        ('admin');
+END
