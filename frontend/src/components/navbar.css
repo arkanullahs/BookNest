@@ -80,6 +80,7 @@
   
   .nav-btn:hover {
     background-color: #173370;
+    color: aliceblue;
   }
   
   /* Add some margin for the content below the navbar to prevent overlap */

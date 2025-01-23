@@ -1,5 +1,5 @@
 import React from 'react';
-import './loginSignup.css';
+import './navbar.css';
 
 const Navbar = () => {
   return (
