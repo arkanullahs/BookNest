@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginSignup from './components/loginSignup.jsx';
+import LoginSignup from './components/login.jsx';
 import SignupPage from './components/signup.jsx';
 
 const HomePage = () => {

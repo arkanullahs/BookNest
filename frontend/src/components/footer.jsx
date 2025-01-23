@@ -1,5 +1,5 @@
 import React from 'react';
-import './loginSignup.css';
+import './login.css';
 
 const Footer = () => {
   return (

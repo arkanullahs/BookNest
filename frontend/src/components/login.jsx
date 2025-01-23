@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
-import "./loginSignup.css";
+import React from 'react';
+import "./login.css";
 import Navbar from './navbar.jsx';
 import './navbar.css';
 import Footer from './footer.jsx';
 import './footer.css';
 
-
-const LoginSignup = () => {
-  const [isSignup, setIsSignup] = useState(false);
-
-  const toggleForm = () => {
-    setIsSignup((prevState) => !prevState);
-  };
-
+const Login = () => {
   return (
     <div>
       {/* Navigation Bar */}
@@ -21,7 +14,7 @@ const LoginSignup = () => {
       {/* Form Section */}
       <div className="container">
         <div className="form-container">
-          <h2>{isSignup ? 'Sign Up' : 'Log In'}</h2>
+          <h2>Log In</h2>
           <form>
             <div className="input-group">
               <label htmlFor="email">Email</label>
@@ -33,35 +26,21 @@ const LoginSignup = () => {
               <input type="password" id="password" placeholder="Enter your password" required />
             </div>
 
-            {!isSignup && (
-              <div className="options-container">
-                <div className="keep-logged-in">
-                  <input type="checkbox" id="keep-logged-in" />
-                  <label htmlFor="keep-logged-in">Keep me logged in</label>
-                </div>
-                <div className="forgot-password">
-                  <a href="#forgot-password">Forgot password?</a>
-                </div>
+            <div className="options-container">
+              <div className="keep-logged-in">
+                <input type="checkbox" id="keep-logged-in" />
+                <label htmlFor="keep-logged-in">Keep me logged in</label>
               </div>
-            )}
-
-            {isSignup && (
-              <div className="input-group">
-                <label htmlFor="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" placeholder="Confirm your password" required />
+              <div className="forgot-password">
+                <a href="#forgot-password">Forgot password?</a>
               </div>
-            )}
+            </div>
 
-            <button type="submit" className="submit-btn">
-              {isSignup ? 'Sign Up' : 'Log In'}
-            </button>
+            <button type="submit" className="submit-btn">Log In</button>
           </form>
 
-          <p className="toggle-text">
-            {isSignup ? 'Already have an account? ' : "Don't have an account? "}
-            <span onClick={toggleForm} className="toggle-link">
-              {isSignup ? 'Log in' : 'Sign up'}
-            </span>
+          <p className="signup-option">
+            Don't have an account? <button className="signup-btn">Sign up</button>
           </p>
 
           <div className="continue-with">
@@ -82,4 +61,4 @@ const LoginSignup = () => {
   );
 };
 
-export default LoginSignup;
+export default Login;

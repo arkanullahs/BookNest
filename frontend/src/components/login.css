@@ -83,20 +83,20 @@
   
   .submit-btn {
     width: 100%;
-    padding: 12px 16px; /* Adjusted padding for better appearance */
+    padding: 12px 16px;
     font-size: 16px;
-    background-color: #152e64; /* Base color */
+    background-color: #152e64; 
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
   }
   
-  /* Button Hover Effect */
+  
   .submit-btn:hover {
-    background-color: #1b2497; /* Hover color */
-    transform: scale(1.05); /* Slight scale effect to make it more interactive */
+    background-color: #1b2497; 
+    transform: scale(1.05); 
   }
   
   .toggle-text {
@@ -136,6 +136,33 @@
     opacity: 0.7;
   }
   
-  /* Navigation Bar */
+
+.signup-option {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666; 
+}
+
+
+.signup-btn {
+  background: none;
+  border: none;
+  color: #192e8d; 
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.signup-btn:hover {
+  color: #0056b3; 
+  text-decoration: none; 
+}
+
+.signup-btn:focus {
+  outline: none; 
+  color: #003d80; 
+}
+
 
 
