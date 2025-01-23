@@ -119,11 +119,11 @@ POST /report: Report inappropriate content or activity.
 
 - Set up Laravel backend and React frontend.
 - Implement user and publisher authentication (registration and login).
-- Create API endpoints for product management (add, update, delete).
-- Basic UI for sign-up pages, login page, and home page showcasing products.
+- Basic UI for sign-up pages, login page, and home page.
 
+- 
 ### Milestone 2: Profile and Administration Features
-
+- Create API endpoints for product management (add, update, delete).
 - Develop buyer/user profile page to manage personal details.
 - Implement publisher/admin page for managing products (add, edit, delete).
 - Create UI for sales information display in the admin panel.
