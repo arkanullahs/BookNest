@@ -6,10 +6,8 @@ import './profilepage.css';
 const ProfilePage = () => {
   return (
     <div className="profile-page">
-      {/* Navbar */}
       <Navbar />
 
-      {/* Profile Section */}
       <div className="profile-header">
         <h2>My Profile</h2>
         <div className="profile-image-wrapper">
@@ -18,7 +16,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Profile Details */}
       <div className="profile-details">
         <ul>
           <li>
@@ -51,7 +48,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

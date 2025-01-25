@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa'; // Importing a user icon from react-icons
 import './navbar.css';
 
 const Navbar = () => {
@@ -24,7 +25,7 @@ const Navbar = () => {
       <div className="navbar-right">
         <button className="nav-btn" onClick={() => navigate('/login')}>Log In</button>
         <button className="nav-btn" onClick={() => navigate('/signup')}>Sign Up</button>
-        
+        <FaUserCircle className="profile-icon" onClick={() => navigate('/profilepage')} />
       </div>
     </nav>
   );
