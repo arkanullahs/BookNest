@@ -25,13 +25,12 @@
     position: absolute;
     background-color: #f7f7f7;
     padding: 40px;
-    border-radius: 10px;
-    
+    border-radius: 10px;    
     width: 100%;
-    max-width: 350px;
+    max-width: 1000px;
     margin-right: 40px;
-    text-align: center;
-    left: 200px;
+    text-align: left;
+    left: 150px;
     top: 200px;
   }
   
@@ -96,6 +95,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 800px;
+    margin-top: 40%;
   }
   
   .signup-form-container h2 {

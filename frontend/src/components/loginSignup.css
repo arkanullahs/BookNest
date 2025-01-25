@@ -19,10 +19,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 450px;
+    
+
   }
   
   .form-container {
     text-align: center;
+    
   }
   
   h2 {
@@ -134,6 +137,10 @@
   
   .social-icon:hover {
     opacity: 0.7;
+  }
+
+  .wave-background{
+    margin-top: 50%;
   }
   
   /* Navigation Bar */
