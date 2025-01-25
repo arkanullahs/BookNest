@@ -48,6 +48,9 @@ const Signup = () => {
     <div>
       <Navbar />
       <div className="signup-page">
+      <div className="reader-container">
+          <h3>Become a BookNest Reader</h3>
+        </div>
         <div className="publisher-container">
           <h3>Are you a publisher?</h3>
           <button className="join-us-btn">
