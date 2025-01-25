@@ -3,6 +3,8 @@ import LoginSignup from './components/login.jsx';
 import SignupPage from './components/signup.jsx';
 import DashboardPage from './components/dashboard.jsx';
 import WelcomePage from './components/welcome.jsx';
+import LandingPage from './components/landingpage.jsx';
+import About from './components/about.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/about" element={<About />} />
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/welcome" element={<WelcomePage />} />

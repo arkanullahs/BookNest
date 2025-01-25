@@ -1,26 +1,30 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate(); // Hook to navigate programmatically
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <h1 className="navbar-title">BookNest</h1>
+        <h1 className="navbar-title" onClick={() => navigate('/')}>BookNest</h1>
       </div>
       <div className="navbar-center">
         <ul className="navbar-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#browse">Browse</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#faq">FAQ</a></li>
+          <li><Link to="/landingpage">Home</Link></li>
+          <li><Link to="/dashboard">Dashboard</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/faq">FAQ</Link></li>
           <li>
             <input type="text" className="search-bar" placeholder="Search..." />
           </li>
         </ul>
       </div>
       <div className="navbar-right">
-        <button className="nav-btn">Log In</button>
-        <button className="nav-btn">Sign Up</button>
+        <button className="nav-btn" onClick={() => navigate('/login')}>Log In</button>
+        <button className="nav-btn" onClick={() => navigate('/signup')}>Sign Up</button>
+        
       </div>
     </nav>
   );

@@ -13,6 +13,7 @@ const WelcomePage = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
+       
     };
 
     return (
