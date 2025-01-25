@@ -1,23 +1,11 @@
-/* General styling for the signup page */
-/*.signup-page {
-    display: flex;
-    justify-content: space-between; /* Align content to both sides 
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-    position: relative;
-  }
-  */
-  /* Left Container for "Are you a publisher?" and "Join Us" Button */
-
-  .checkbox-group {
-    margin-bottom: 20px; /* Add space between checkbox and submit button */
+ .checkbox-group {
+    margin-bottom: 20px; 
     display: flex;
     align-items: center;
   }
   
   .checkbox-group input {
-    margin-right: 10px; /* Space between checkbox and label */
+    margin-right: 10px; 
   }
   
   .terms-label {
@@ -33,70 +21,55 @@
   .terms-link:hover {
     text-decoration: underline;
   }
-  
-  .left-text {
-    position: absolute; /* Positioning outside of the signup container */
-    left: 200px; /* Space from the left edge */
-    top: 50%; /* Vertically center the text */
-    transform: translateY(-50%);
-    bottom: 80px; /* Adjust for true vertical centering */
-  }
-  
-  .left-text h1 {
-    font-size: 36px;
-    color: #152e64; /* Customize text color */
-    font-weight: bold;
-    margin: 0;
-  }
-
   .publisher-container {
-    position: absolute; /* Positioning outside of the signup container */
-    left: 200px; /* Space from the left edge */
-    top: 60%; /* Vertically center the text */
-    transform: translateY(-50%); /* Adjust for true vertical centering */
-    background-color: #f9f9f9; /* Optional: Add a background color */
-    padding: 20px;
+    position: absolute;
+    background-color: #f4f4f4;
+    padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    margin-right: 40px;
+    text-align: center;
+    left: 200px;
+    top: 500px;
   }
   
-  .publisher-container h2 {
-    font-size: 24px;
-    color: #152e64;
-    font-weight: bold;
-    margin-bottom: 15px;
+  .publisher-container h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 20px;
   }
   
-  .publisher-container .join-us-btn {
-    padding: 12px 20px;
-    background-color: #152e64;
+  .join-us-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #192080;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
   
-  .publisher-container .join-us-btn:hover {
-    background-color: #1b2497;
+  .join-us-btn:hover {
+    background-color: #0056b3;
   }
   
-  /* Signup Container (right side) */
   .signup-container {
     display: flex;
-    justify-content: flex-end; /* Align form container to the right */
+    justify-content: flex-end; 
     align-items: center;
-    height: 100%; /* Full height */
+    height: 100%; 
     padding: 20px;
-    width: 150%; /* Increase width to extend beyond the normal container */
+    width: 150%; 
     position: relative;
-    right: -50px; /* Adjust to move it further to the right */
+    right: -50px; 
     bottom: 80px;
     left: 400px;
   }
   
-  /* Signup Form Container */
+  
   .signup-form-container {
     background-color: #fff;
     padding: 40px;
@@ -106,7 +79,6 @@
     max-width: 800px;
   }
   
-  /* Form Title */
   .signup-form-container h2 {
     margin-bottom: 20px;
     color: #333;
@@ -114,7 +86,6 @@
     text-align: center;
   }
   
-  /* Input Group */
   .input-group {
     margin-bottom: 20px;
   }
@@ -136,12 +107,12 @@
     transition: border-color 0.3s ease;
   }
   
-  /* Input Focus Effect */
+ 
   .input-group input:focus {
     border-color: #007bff;
   }
   
-  /* Submit Button Styling */
+  
   .submit-btn {
     width: 100%;
     padding: 12px;
@@ -154,12 +125,12 @@
     transition: background-color 0.3s ease;
   }
   
-  /* Submit Button Hover Effect */
+  
   .submit-btn:hover {
     background-color: #1b2497;
   }
   
-  /* Toggle Text */
+  
   .toggle-text {
     margin-top: 20px;
     text-align: center;
@@ -175,7 +146,7 @@
     text-decoration: underline;
   }
   
-  /* Footer Section Styling */
+ 
   footer {
     background-color: #333;
     color: white;
@@ -184,10 +155,10 @@
     font-size: 14px;
   }
   
-  /* Responsive Design */
+  
   @media (max-width: 768px) {
     .signup-page {
-      flex-direction: column; /* Stack text and form vertically */
+      flex-direction: column; 
       justify-content: center;
       align-items: center;
     }
