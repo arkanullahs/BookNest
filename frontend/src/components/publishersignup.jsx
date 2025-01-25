@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './navbar';
 import Footer from './footer';
-import './signup.css';
+import './publishersignup.css';
 
-const Signup = () => {
+const PublisherSignup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,22 +47,23 @@ const Signup = () => {
   return (
     <div>
       <Navbar />
-      <div className="signup-page">
-        <div className="reader-container">
-          <h3>Become a BookNest Reader</h3>
+      <div className="publishersignup-page">
+        <div className="info-container">
+          <div className="info-card">
+            <h3>Reach millions</h3>
+            <p>Reach millions through the BookNest website.</p>
+            <button className="info-btn">How it works →</button>
+          </div>
+          <div className="info-card">
+            <h3>Make millions</h3>
+            <p>By Publishing MAke Millions.</p>
+            <button className="info-btn">See Pricing →</button>
+          </div>
         </div>
-        <div className="publisher-container">
-          <h3>Are you a publisher?</h3>
-          <button 
-            className="join-us-btn" 
-            onClick={() => navigate('/publishersignup')} // Redirect to PublisherSignup page
-          >
-            Join Us
-          </button>
-        </div>
-        <div className="signup-container">
-          <div className="signup-form-container">
-            <h2>Sign Up</h2>
+
+        <div className="publishersignup-container">
+          <div className="publishersignup-form-container">
+            <h2>Publisher Sign Up</h2>
             <form onSubmit={handleSubmit}>
               <div className="input-group">
                 <label htmlFor="name">Name</label>
@@ -135,4 +136,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default PublisherSignup;
