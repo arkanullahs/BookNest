@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +16,12 @@ use App\Http\Controllers\TestController;
 */
 Route::get('/test', [TestController::class, 'getTestHuman'])->middleware('test.middleware');
 Route::get('/test/{id}', [TestController::class, 'getTestHumanWithId']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('jwt.auth')->group(function () {
+    Route::get('/profile', function (Request $request) {
+        return response()->json(['message' => 'Welcome to your profile']);
+    });
+});
+
 
