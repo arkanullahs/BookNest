@@ -49,7 +49,6 @@ class JwtService
 
             $this->config->validator()->assert($token, $constraint);
 
-            // Check expiration manually since we removed StrictValidAt
             $now = new DateTimeImmutable();
             if ($token->isExpired($now)) {
                 return null;
