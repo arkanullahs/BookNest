@@ -9,11 +9,21 @@ use Symfony\Component\HttpFoundation\Response;
 class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role): Response
-    {
-        if (auth()->user() && auth()->user()->role === $role) {
-            return $next($request);
-        }
+{
+    // Ensure user is authenticated
+    $user = auth()->user();
 
-        return response()->json(['message' => 'Unauthorized'], 403);
+    if (!$user) {
+        return response()->json(['message' => 'Unauthorized - No user found'], 403);
     }
+
+    // Check if the user's role matches the required role
+    if ($user->role !== $role) {
+        return response()->json(['message' => 'Unauthorized - Insufficient permissions'], 403);
+    }
+
+    return $next($request);
 }
+
+}
+

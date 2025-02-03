@@ -6,6 +6,9 @@ import WelcomePage from './components/welcome.jsx';
 import LandingPage from './components/landingpage.jsx';
 import About from './components/about.jsx';
 import PublisherSignupPage from './components/publishersignup.jsx';
+import AdminDashboard from './components/AdminDashboard.jsx';
+import PublisherDashboard from './components/PublisherDashboard.jsx';
+import UserDashboard from './components/UserDashboard.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -33,6 +36,31 @@ function App() {
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/publisher-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['publisher']}>
+              <PublisherDashboard />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/publishersignup" element={<PublisherSignupPage />} />
         <Route
           path="/dashboard"
@@ -47,15 +75,20 @@ function App() {
   );
 }
 
-const ProtectedRoute = ({ children }) => {
-  const navigate = useNavigate();
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const authToken = localStorage.getItem('token');
+  const userRole = localStorage.getItem('role');
 
   if (!authToken) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/" replace />; // Redirect if role is not allowed
   }
 
   return children;
 };
+
 
 export default App;

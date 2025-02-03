@@ -27,10 +27,21 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token); // Save the token
-        navigate('/dashboard'); // Navigate to dashboard after login
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('role', data.role);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+
+
+        if (data.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (data.role === 'publisher') {
+          navigate('/publisher-dashboard');
+        } else {
+          navigate('/user-dashboard');
+        }
       } else {
-        setError(data.token || 'Something went wrong!');
+        setError(data.message || 'Invalid credentials.');
       }
     } catch (err) {
       setError('Unable to connect to the server.');
@@ -46,40 +57,28 @@ const Login = () => {
             <h2>Log In</h2>
             <form onSubmit={handleSubmit}>
               <div className="input-group">
-                <label htmlFor="email">Email</label>
+                <label>Email</label>
                 <input
                   type="email"
-                  id="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
-
               <div className="input-group">
-                <label htmlFor="password">Password</label>
+                <label>Password</label>
                 <input
                   type="password"
-                  id="password"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
-
               {error && <p className="error">{error}</p>}
-
               <button type="submit" className="submit-btn">Log In</button>
             </form>
-
-            <p className="toggle-text">
-              Don't have an account?
-              <span onClick={() => navigate('/signup')} className="toggle-link">
-                Sign up
-              </span>
-            </p>
           </div>
         </div>
       </div>

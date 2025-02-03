@@ -9,6 +9,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('user'); // Default role is "user"
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ const Signup = () => {
       return;
     }
 
-    const payload = { name, email, password };
+    const payload = { name, email, password, role }; // Send role
     const endpoint = 'http://127.0.0.1:8000/api/register';
 
     try {
@@ -35,7 +36,7 @@ const Signup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/welcome'); // Redirect to welcome page upon successful signup
+        navigate('/login'); // Redirect to login after successful signup
       } else {
         setError(data.message || 'Something went wrong!');
       }
@@ -48,18 +49,6 @@ const Signup = () => {
     <div>
       <Navbar />
       <div className="signup-page">
-        <div className="reader-container">
-          <h3>Become a BookNest Reader</h3>
-        </div>
-        <div className="publisher-container">
-          <h3>Are you a publisher?</h3>
-          <button 
-            className="join-us-btn" 
-            onClick={() => navigate('/publishersignup')} // Redirect to PublisherSignup page
-          >
-            Join Us
-          </button>
-        </div>
         <div className="signup-container">
           <div className="signup-form-container">
             <h2>Sign Up</h2>
@@ -112,14 +101,16 @@ const Signup = () => {
                 />
               </div>
 
-              {error && <p className="error">{error}</p>}
-
-              <div className="checkbox-group">
-                <input type="checkbox" id="terms" required />
-                <label htmlFor="terms" className="terms-label">
-                  I agree to the <a href="/terms" className="terms-link">terms</a> and <a href="/privacy-policy" className="terms-link">privacy policy</a>.
-                </label>
+              <div className="input-group">
+                <label htmlFor="role">Select Role</label>
+                <select id="role" value={role} onChange={(e) => setRole(e.target.value)} required>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                  <option value="publisher">Publisher</option>
+                </select>
               </div>
+
+              {error && <p className="error">{error}</p>}
 
               <button type="submit" className="submit-btn">Sign Up</button>
             </form>

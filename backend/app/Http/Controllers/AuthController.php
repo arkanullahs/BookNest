@@ -35,7 +35,8 @@ class AuthController extends Controller
 
     return response()->json([
         'token' => $this->jwtService->generateToken($user),
-        'role' => $user->role
+        'role' => $user->role,
+        'user' => $user
     ], 201);
 }
 
@@ -59,7 +60,8 @@ public function login(Request $request)
     return response()->json([
         'success' => true,
         'token' => $this->jwtService->generateToken($user),
-        'role' => $user->role // Include role in response
+        'role' => $user->role, // Include role in response
+        'user' => $user,
     ]);
 }
 
