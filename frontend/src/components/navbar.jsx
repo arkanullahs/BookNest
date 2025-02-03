@@ -13,9 +13,8 @@ const Navbar = () => {
       <div className="navbar-center">
         <ul className="navbar-links">
           <li><Link to="/landingpage">Home</Link></li>
-          <li><Link to="/dashboard">Dashboard</Link></li>
           <li><Link to="/about">About</Link></li>
-          <li><Link to="/faq">FAQ</Link></li>
+          <li><Link to="/about">FAQ</Link></li>
           <li>
             <input type="text" className="search-bar" placeholder="Search..." />
           </li>
@@ -24,7 +23,7 @@ const Navbar = () => {
       <div className="navbar-right">
         <button className="nav-btn" onClick={() => navigate('/login')}>Log In</button>
         <button className="nav-btn" onClick={() => navigate('/signup')}>Sign Up</button>
-        
+
       </div>
     </nav>
   );
