@@ -15,6 +15,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',  // Added role field
     ];
 
     protected $hidden = [
@@ -25,4 +26,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Role-based authorization helpers
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isPublisher()
+    {
+        return $this->role === 'publisher';
+    }
+
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
 }

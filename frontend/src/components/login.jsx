@@ -27,10 +27,10 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.message); // Save the token
+        localStorage.setItem('token', data.token); // Save the token
         navigate('/dashboard'); // Navigate to dashboard after login
       } else {
-        setError(data.message || 'Something went wrong!');
+        setError(data.token || 'Something went wrong!');
       }
     } catch (err) {
       setError('Unable to connect to the server.');

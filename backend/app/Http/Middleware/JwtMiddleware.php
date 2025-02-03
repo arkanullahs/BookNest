@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\JwtService;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,17 @@ class JwtMiddleware
         if (!$token || !$this->jwtService->validateToken($token)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
+
+        // Extract user ID from token
+        $payload = $this->jwtService->decodeToken($token);
+        $user = User::find($payload['sub'] ?? null);
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Attach user to request
+        auth()->setUser($user);
 
         return $next($request);
     }
