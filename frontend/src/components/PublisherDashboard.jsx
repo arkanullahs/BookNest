@@ -1,45 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { logout } from './logout';
+import React from "react";
+import Navbar from "./navbar";
+import Footer from "./footer";
+import "./PublisherDashboard.css";
 
 const PublisherDashboard = () => {
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchUserData = () => {
-            // Get the token and user data from localStorage
-            const token = localStorage.getItem('token');
-            const userData = localStorage.getItem('user');
-
-            // Check if token exists, otherwise redirect to login
-            if (!token || !userData) {
-                navigate('/login');
-                return;
-            }
-
-            // Parse the user data (stored in localStorage) and set it to state
-            setUser(JSON.parse(userData));
-        };
-
-        fetchUserData();
-    }, [navigate]);
-
     return (
-        <div>
-            <h2>Publisher Dashboard</h2>
-            {user ? (
-                <div>
-                    <p><strong>Name:</strong> {user.name}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Role:</strong> {user.role}</p>
-                    <button onClick={() => logout(navigate)}>Logout</button>
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
+      <div className="dashboard-wrapper">
+        <Navbar />
+        <div className="dashboard">
+          <header className="dashboard-header">
+            <h1 className="dashboard-title">Publisher Dashboard</h1>
+            <button className="add-book-btn">Add New Book</button>
+          </header>
+          <div className="dashboard-container">
+            <p>Total Books: <span className="dashboard-value">0</span></p>
+            <p>Total Publishers: <span className="dashboard-value">0</span></p>
+            <p>Total Revenue: <span className="dashboard-value">$0.00</span></p>
+          </div>
         </div>
+        <Footer />
+      </div>
     );
-};
-
-export default PublisherDashboard;
+  };
+  
+  export default PublisherDashboard;
