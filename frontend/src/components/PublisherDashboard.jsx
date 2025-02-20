@@ -13,9 +13,19 @@ const PublisherDashboard = () => {
             <button className="add-book-btn">Add New Book</button>
           </header>
           <div className="dashboard-container">
-            <p>Total Books: <span className="dashboard-value">0</span></p>
-            <p>Total Publishers: <span className="dashboard-value">0</span></p>
-            <p>Total Revenue: <span className="dashboard-value">$0.00</span></p>
+            <p className="dashboard-item left">Total Books: <span className="dashboard-value">0</span></p>
+            <p className="dashboard-item center">Total Publishers: <span className="dashboard-value">0</span></p>
+            <p className="dashboard-item right">Total Revenue: <span className="dashboard-value">$0.00</span></p>
+          </div>
+          <div className="book-info-container">
+            <img src="https://www.neh.gov/sites/default/files/styles/medium/public/2018-06/openbooks.jpg?itok=kUdGYpx_" alt="Book Cover" className="book-image" />
+            <div className="book-details">
+              <p><strong>Title:</strong> Example Book Title</p>
+              <p><strong>Price:</strong> $10.99</p>
+              <p><strong>Description:</strong> This is a short description of the book.</p>
+              <p><strong>Category:</strong> Fiction</p>
+              <p><strong>Status:</strong> Available</p>
+            </div>
           </div>
         </div>
         <Footer />

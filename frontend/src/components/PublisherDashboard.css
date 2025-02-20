@@ -72,3 +72,33 @@
   .dashboard-value {
     font-weight: bold;
   }
+
+  .book-info-container {
+    margin-top: 20px;
+    display: flex;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    height: 400px;
+  }
+  
+  .book-image {
+    width: 200px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+  
+  .book-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .book-details p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
