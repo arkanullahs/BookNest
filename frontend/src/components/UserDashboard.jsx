@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from './logout';
+import Navbar from './navbar';
+import Footer from './footer';
 
 const UserDashboard = () => {
     const [user, setUser] = useState(null);
@@ -27,6 +29,9 @@ const UserDashboard = () => {
 
     return (
         <div>
+            <Navbar/>
+        
+        <div>
             <h2>User Dashboard</h2>
             {user ? (
                 <div>
@@ -38,6 +43,8 @@ const UserDashboard = () => {
             ) : (
                 <p>Loading...</p>
             )}
+            </div>
+            <Footer/>
         </div>
     );
 };
