@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
 Route::middleware('jwt.auth')->group(function () {
 
     Route::get('/books', [BookController::class, 'index']);
@@ -23,21 +24,6 @@ Route::middleware('jwt.auth')->group(function () {
             'user' => $request->user()
         ]);
     });
-
-    // Role-based routes
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'index']);
-    });
-
-    Route::middleware('role:publisher')->group(function () {
-        Route::get('/publisher/dashboard', [PublisherController::class, 'index']);
-    });
-
-    Route::middleware('role:user')->group(function () {
-        Route::get('/user/dashboard', [UserController::class, 'index']);
-    });
-    Route::middleware(['jwt'])->group(function () {
-
         // User routes
         Route::middleware(['role:user'])->group(function () {
             Route::post('/books/{id}/buy', [PurchaseController::class, 'store']);
@@ -50,6 +36,5 @@ Route::middleware('jwt.auth')->group(function () {
             Route::post('/books', [BookController::class, 'store']);
             Route::put('/books/{id}', [BookController::class, 'update']);
             Route::delete('/books/{id}', [BookController::class, 'destroy']);
-        });
-    });
-});
+        });});
+
