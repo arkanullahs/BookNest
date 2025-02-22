@@ -1,16 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import "./PublisherDashboard.css";
 
 const PublisherDashboard = () => {
+    const navigate = useNavigate();
+
     return (
       <div className="dashboard-wrapper">
         <Navbar />
         <div className="dashboard">
           <header className="dashboard-header">
             <h1 className="dashboard-title">Publisher Dashboard</h1>
-            <button className="add-book-btn">Add New Book</button>
+            <button className="add-book-btn" onClick={() => navigate("/add-book")}>Add New Book</button>
           </header>
           <div className="dashboard-container">
             <p className="dashboard-item left">Total Books: <span className="dashboard-value">0</span></p>
@@ -25,12 +28,16 @@ const PublisherDashboard = () => {
               <p><strong>Description:</strong> This is a short description of the book.</p>
               <p><strong>Category:</strong> Fiction</p>
               <p><strong>Status:</strong> Available</p>
+              <div className="book-actions">
+                <button className="edit-book-btn">Edit</button>
+                <button className="delete-book-btn">Delete</button>
+              </div>
             </div>
           </div>
         </div>
         <Footer />
       </div>
     );
-  };
+};
   
-  export default PublisherDashboard;
+export default PublisherDashboard;

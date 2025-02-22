@@ -9,6 +9,7 @@ import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
 import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
+import AddBook from './components/AddBook.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -42,9 +43,9 @@ function App() {
         
         {/* Publisher Dashboard is now accessible directly */}
         <Route path="/publisher-dashboard" element={<PublisherDashboard />} />
-
         <Route path="/publishersignup" element={<PublisherSignupPage />} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path="/add-book" element={<AddBook />} />
       </Routes>
     </Router>
   );

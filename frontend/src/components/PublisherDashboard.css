@@ -80,13 +80,13 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: 450px;
     height: 400px;
   }
   
   .book-image {
     width: 200px;
-    height: 350px;
+    height: 100%;
     object-fit: cover;
     border-radius: 10px;
     margin-right: 20px;
@@ -101,4 +101,29 @@
   .book-details p {
     margin: 5px 0;
     font-size: 16px;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  
+  .edit-book-btn, .delete-book-btn {
+    margin-top: 110px;
+    padding: 5px 10px;
+    font-size: 1em;
+    display: inline-block;
+    margin-right: 0;
+  }
+
+.delete-book-btn {
+  left: 100px;
+  background-color: rgb(236, 93, 93);
+  color: white;
+}
+
+.edit-book-btn {
+    background-color: rgb(72, 74, 197);
+    color: white;
   }
