@@ -5,6 +5,7 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Services\JwtService;
 
 class BookController extends Controller
 {
@@ -120,5 +121,24 @@ class BookController extends Controller
 
         $book->delete();
         return response()->json(['message' => 'Book deleted successfully']);
+    }
+    public function publisherBooks()
+    {
+        $books = Book::where('publisher_id', auth()->id())
+            ->withCount(['orders as total_sold' => function($query) {
+                $query->select(DB::raw('sum(order_items.quantity)'));
+            }])
+            ->withAvg('comments as average_rating', 'rating')
+            ->withCount('comments')
+            ->paginate(10);
+
+        return response()->json($books);
+    }
+
+    public function show(Book $book)
+    {
+        return response()->json([
+            'book' => $book->load(['publisher:id,name', 'comments.user:id,name'])
+        ]);
     }
 }
