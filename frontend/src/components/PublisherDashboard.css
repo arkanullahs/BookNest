@@ -24,6 +24,7 @@
   }
   
   .add-book-btn {
+    width: 150px;
     background-color: #2148b1;
     color: white;
     border: none;
