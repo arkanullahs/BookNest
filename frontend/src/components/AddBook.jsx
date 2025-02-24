@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./AddBook.css"; // Import the CSS file
+import Navbar from "./navbar.jsx";
+import Footer from "./footer.jsx";
 
 const AddBook = () => {
   const [Data, setData] = useState({
@@ -24,14 +26,7 @@ const AddBook = () => {
 
   const submit = async () => {
     try {
-      if (
-        Data.url === "" ||
-        Data.title === "" ||
-        Data.author === "" ||
-        Data.price === "" ||
-        Data.desc === "" ||
-        Data.language === ""
-      ) {
+      if (Object.values(Data).some((field) => field === "")) {
         alert("All fields are required");
       } else {
         const response = await axios.post(
@@ -56,23 +51,31 @@ const AddBook = () => {
 
   return (
     <div className="add-book-container">
+      <Navbar />
       <h1 className="add-book-title">Add Book</h1>
       <div className="form-container">
-        {/* Image URL */}
-        <div>
-          <label htmlFor="image" className="label">
-            Image URL
-          </label>
-          <input
-            id="image"
-            type="text"
-            className="input"
-            placeholder="URL of image"
-            name="url"
-            required
-            value={Data.url}
-            onChange={change}
-          />
+        {/* Image Input with Preview */}
+        <div className="image-input-container">
+          <div className="image-input">
+            <label htmlFor="image" className="label">
+              Image URL
+            </label>
+            <input
+              id="image"
+              type="text"
+              className="input"
+              placeholder="URL of image"
+              name="url"
+              required
+              value={Data.url}
+              onChange={change}
+            />
+          </div>
+          {Data.url && (
+            <div className="image-preview">
+              <img src={Data.url} alt="Book Preview" />
+            </div>
+          )}
         </div>
 
         {/* Title of Book */}
@@ -165,6 +168,7 @@ const AddBook = () => {
           Add Book
         </button>
       </div>
+      <Footer />
     </div>
   );
 };
