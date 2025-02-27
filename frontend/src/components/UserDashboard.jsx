@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
@@ -8,16 +8,28 @@ const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [activeSection, setActiveSection] = useState("profile");
   const [data, setData] = useState({
-    address: null,
+    address: [],
     orders: null,
     list: null,
   });
-
+  const [newAddress, setNewAddress] = useState({
+    fullName: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
+    phone: "",
+    isDefault: false
+  });
+  
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   // Mock data to display when backend is unavailable
   const mockData = {
-    address: "No saved address.",
+    address: [],
     orders: "No orders found.",
     list: "Your list is empty.",
   };
@@ -32,6 +44,25 @@ const UserDashboard = () => {
       return;
     }
     setUser(JSON.parse(userData));
+    
+    // Set mock addresses for demonstration
+    setData(prev => ({
+      ...prev,
+      address: [
+        {
+          id: 1,
+          fullName: "John Doe",
+          addressLine1: "123 Book Street",
+          addressLine2: "Apt 45",
+          city: "Bookville",
+          state: "NY",
+          zipCode: "10001",
+          country: "USA",
+          phone: "555-123-4567",
+          isDefault: true
+        }
+      ]
+    }));
   }, [navigate]);
 
   // Fetch data from backend or use mock data if unavailable
@@ -46,13 +77,89 @@ const UserDashboard = () => {
       } catch (error) {
         console.error(error);
         // Use mock data if API fails
-        setData((prev) => ({ ...prev, [type]: mockData[type] }));
+        if (type !== 'address') { // We already set mock address data above
+          setData((prev) => ({ ...prev, [type]: mockData[type] }));
+        }
       }
     };
 
     // Attempt fetching data for each section
-    ["address", "orders", "list"].forEach(fetchData);
+    ["orders", "list"].forEach(fetchData);
   }, []);
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Handle the file upload logic here
+      console.log("File selected:", file.name);
+      // You would typically upload this file to your server
+    }
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewAddress(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleAddAddress = () => {
+    // Validate address fields here
+    const addressId = Date.now(); // Simple way to generate unique ID
+    const updatedAddresses = [...data.address, { ...newAddress, id: addressId }];
+    
+    setData(prev => ({
+      ...prev,
+      address: updatedAddresses
+    }));
+    
+    // Reset form
+    setNewAddress({
+      fullName: "",
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "",
+      phone: "",
+      isDefault: false
+    });
+    
+    // Here you would typically make an API call to save the address
+    console.log("Address added:", newAddress);
+  };
+
+  const handleDeleteAddress = (addressId) => {
+    const updatedAddresses = data.address.filter(addr => addr.id !== addressId);
+    setData(prev => ({
+      ...prev,
+      address: updatedAddresses
+    }));
+    
+    // Here you would typically make an API call to delete the address
+    console.log("Address deleted:", addressId);
+  };
+
+  const handleSetDefaultAddress = (addressId) => {
+    const updatedAddresses = data.address.map(addr => ({
+      ...addr,
+      isDefault: addr.id === addressId
+    }));
+    
+    setData(prev => ({
+      ...prev,
+      address: updatedAddresses
+    }));
+    
+    // Here you would typically make an API call to update the default address
+    console.log("Default address set:", addressId);
+  };
 
   const renderProfileSection = () => {
     return (
@@ -61,9 +168,18 @@ const UserDashboard = () => {
         
         <div className="profile-photo-container">
           <div className="profile-photo">
-            {user?.name ? user.name.charAt(0) : "U"}
+            {user?.name ? user.name.charAt(0).toLowerCase() : "e"}
           </div>
-          <button className="upload-photo-btn">Upload New Photo</button>
+          <button className="upload-photo-btn" onClick={handleUploadClick}>
+            Upload New Photo
+          </button>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            style={{ display: "none" }} 
+            accept="image/*"
+          />
         </div>
         
         <div className="profile-form">
@@ -73,7 +189,7 @@ const UserDashboard = () => {
               <input 
                 type="text" 
                 id="firstName" 
-                defaultValue={user?.name?.split(' ')[0] || ""} 
+                defaultValue={user?.name?.split(' ')[0] || "elman"} 
               />
             </div>
             
@@ -116,7 +232,7 @@ const UserDashboard = () => {
               <input 
                 type="email" 
                 id="email" 
-                defaultValue={user?.email || ""} 
+                defaultValue={user?.email || "elmanaust@gmail.com"} 
               />
             </div>
             
@@ -163,136 +279,292 @@ const UserDashboard = () => {
     );
   };
 
+  const renderAddressSection = () => {
+    return (
+      <div className="address-section">
+        <div className="section-header">
+          <h2>My Addresses</h2>
+          <button className="add-btn" onClick={() => document.getElementById('addAddressForm').style.display = 'block'}>
+            + Add New Address
+          </button>
+        </div>
+        
+        {data.address.length > 0 ? (
+          <div className="addresses-container">
+            {data.address.map((address) => (
+              <div key={address.id} className={`address-card ${address.isDefault ? 'default-address' : ''}`}>
+                {address.isDefault && <span className="default-badge">Default</span>}
+                <h3>{address.fullName}</h3>
+                <p>{address.addressLine1}</p>
+                {address.addressLine2 && <p>{address.addressLine2}</p>}
+                <p>{address.city}, {address.state} {address.zipCode}</p>
+                <p>{address.country}</p>
+                <p>Phone: {address.phone}</p>
+                
+                <div className="address-actions">
+                  {!address.isDefault && (
+                    <button 
+                      className="default-btn"
+                      onClick={() => handleSetDefaultAddress(address.id)}
+                    >
+                      Set as Default
+                    </button>
+                  )}
+                  <button 
+                    className="edit-btn"
+                    onClick={() => console.log("Edit address:", address.id)}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    className="delete-btn"
+                    onClick={() => handleDeleteAddress(address.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-addresses">
+            <p>You don't have any saved addresses yet.</p>
+          </div>
+        )}
+        
+        <div id="addAddressForm" className="address-form" style={{ display: 'none' }}>
+          <h3>Add New Address</h3>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="fullName">Full Name</label>
+              <input 
+                type="text" 
+                id="fullName"
+                name="fullName"
+                value={newAddress.fullName}
+                onChange={handleAddressChange}
+              />
+            </div>
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="addressLine1">Address Line 1</label>
+              <input 
+                type="text" 
+                id="addressLine1"
+                name="addressLine1"
+                value={newAddress.addressLine1}
+                onChange={handleAddressChange}
+                placeholder="Street address, P.O. box"
+              />
+            </div>
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="addressLine2">Address Line 2 (Optional)</label>
+              <input 
+                type="text" 
+                id="addressLine2"
+                name="addressLine2"
+                value={newAddress.addressLine2}
+                onChange={handleAddressChange}
+                placeholder="Apartment, suite, unit, building, floor, etc."
+              />
+            </div>
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="city">City</label>
+              <input 
+                type="text" 
+                id="city"
+                name="city"
+                value={newAddress.city}
+                onChange={handleAddressChange}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="state">State/Province/Region</label>
+              <input 
+                type="text" 
+                id="state"
+                name="state"
+                value={newAddress.state}
+                onChange={handleAddressChange}
+              />
+            </div>
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="zipCode">ZIP Code</label>
+              <input 
+                type="text" 
+                id="zipCode"
+                name="zipCode"
+                value={newAddress.zipCode}
+                onChange={handleAddressChange}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="country">Country</label>
+              <input 
+                type="text" 
+                id="country"
+                name="country"
+                value={newAddress.country}
+                onChange={handleAddressChange}
+              />
+            </div>
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="phone">Phone Number</label>
+              <input 
+                type="text" 
+                id="phone"
+                name="phone"
+                value={newAddress.phone}
+                onChange={handleAddressChange}
+              />
+            </div>
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <input 
+                  type="checkbox"
+                  name="isDefault"
+                  checked={newAddress.isDefault}
+                  onChange={handleAddressChange}
+                />
+                Make this my default address
+              </label>
+            </div>
+          </div>
+          
+          <div className="form-actions">
+            <button 
+              className="cancel-btn"
+              onClick={() => document.getElementById('addAddressForm').style.display = 'none'}
+            >
+              Cancel
+            </button>
+            <button 
+              className="save-btn"
+              onClick={handleAddAddress}
+            >
+              Save Address
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderSection = (sectionName, title, content) => {
+    return (
+      <div className="generic-section">
+        <h2>{title}</h2>
+        {typeof content === 'string' ? (
+          <p className="empty-message">{content}</p>
+        ) : (
+          content
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="dashboard-container">
       <Navbar />
 
-      <div className="dashboard-content">
-        {/* Sidebar */}
-        <aside className="sidebar">
-          <div className="user-welcome">
-            <div className="user-avatar">
-              {user?.name ? user.name.charAt(0) : "U"}
+      <div className="dashboard-wrapper">
+        <div className="dashboard-content">
+          {/* Sidebar */}
+          <aside className="sidebar">
+            <div className="user-welcome">
+              <div className="user-avatar">
+                {user?.name ? user.name.charAt(0).toLowerCase() : "e"}
+              </div>
+              <div className="user-info">
+                <span>Hello</span>
+                <h3>{user?.name || "elman"}</h3>
+              </div>
             </div>
-            <div className="user-info">
-              <span>Hello</span>
-              <h3>{user?.name || "User"}</h3>
-            </div>
-          </div>
-          
-          <ul className="sidebar-menu">
-            <li
-              className={activeSection === "profile" ? "active" : ""}
-              onClick={() => setActiveSection("profile")}
-            >
-              My Profile
-            </li>
-            <li
-              className={activeSection === "address" ? "active" : ""}
-              onClick={() => setActiveSection("address")}
-            >
-              My Address
-            </li>
-            <li
-              className={activeSection === "orders" ? "active" : ""}
-              onClick={() => setActiveSection("orders")}
-            >
-              My Orders
-            </li>
-            <li
-              className={activeSection === "ebook" ? "active" : ""}
-              onClick={() => setActiveSection("ebook")}
-            >
-              My eBook Library
-            </li>
-            <li
-              className={activeSection === "list" ? "active" : ""}
-              onClick={() => setActiveSection("list")}
-            >
-              My List
-            </li>
-            <li
-              className={activeSection === "wishlist" ? "active" : ""}
-              onClick={() => setActiveSection("wishlist")}
-            >
-              My Wishlist
-            </li>
-            <li
-              className={activeSection === "reviews" ? "active" : ""}
-              onClick={() => setActiveSection("reviews")}
-            >
-              My Rating & Reviews
-            </li>
-            <li
-              className={activeSection === "authors" ? "active" : ""}
-              onClick={() => setActiveSection("authors")}
-            >
-              My Following Authors
-            </li>
-          </ul>
-        </aside>
+            
+            <ul className="sidebar-menu">
+              <li
+                className={activeSection === "profile" ? "active" : ""}
+                onClick={() => setActiveSection("profile")}
+              >
+                My Profile
+              </li>
+              <li
+                className={activeSection === "address" ? "active" : ""}
+                onClick={() => setActiveSection("address")}
+              >
+                My Address
+              </li>
+              <li
+                className={activeSection === "orders" ? "active" : ""}
+                onClick={() => setActiveSection("orders")}
+              >
+                My Orders
+              </li>
+              <li
+                className={activeSection === "ebook" ? "active" : ""}
+                onClick={() => setActiveSection("ebook")}
+              >
+                My eBook Library
+              </li>
+              <li
+                className={activeSection === "list" ? "active" : ""}
+                onClick={() => setActiveSection("list")}
+              >
+                My List
+              </li>
+              <li
+                className={activeSection === "wishlist" ? "active" : ""}
+                onClick={() => setActiveSection("wishlist")}
+              >
+                My Wishlist
+              </li>
+              <li
+                className={activeSection === "reviews" ? "active" : ""}
+                onClick={() => setActiveSection("reviews")}
+              >
+                My Rating & Reviews
+              </li>
+              <li
+                className={activeSection === "authors" ? "active" : ""}
+                onClick={() => setActiveSection("authors")}
+              >
+                My Following Authors
+              </li>
+            </ul>
+          </aside>
 
-        {/* Main Content */}
-        <section className="main-content">
-          {/* My Profile Section */}
-          {activeSection === "profile" && renderProfileSection()}
-
-          {/* My Address Section */}
-          {activeSection === "address" && (
-            <div>
-              <h2>My Address</h2>
-              <p>{data.address}</p>
-            </div>
-          )}
-
-          {/* My Orders Section */}
-          {activeSection === "orders" && (
-            <div>
-              <h2>My Orders</h2>
-              <p>{data.orders}</p>
-            </div>
-          )}
-          
-          {/* My eBook Library Section */}
-          {activeSection === "ebook" && (
-            <div>
-              <h2>My eBook Library</h2>
-              <p>Your eBook library is empty.</p>
-            </div>
-          )}
-
-          {/* My List Section */}
-          {activeSection === "list" && (
-            <div>
-              <h2>My List</h2>
-              <p>{data.list}</p>
-            </div>
-          )}
-          
-          {/* My Wishlist Section */}
-          {activeSection === "wishlist" && (
-            <div>
-              <h2>My Wishlist</h2>
-              <p>Your wishlist is empty.</p>
-            </div>
-          )}
-          
-          {/* My Rating & Reviews Section */}
-          {activeSection === "reviews" && (
-            <div>
-              <h2>My Rating & Reviews</h2>
-              <p>You haven't submitted any reviews yet.</p>
-            </div>
-          )}
-          
-          {/* My Following Authors Section */}
-          {activeSection === "authors" && (
-            <div>
-              <h2>My Following Authors</h2>
-              <p>You are not following any authors yet.</p>
-            </div>
-          )}
-        </section>
+          {/* Main Content */}
+          <section className="main-content">
+            {activeSection === "profile" && renderProfileSection()}
+            {activeSection === "address" && renderAddressSection()}
+            {activeSection === "orders" && renderSection("orders", "My Orders", data.orders)}
+            {activeSection === "ebook" && renderSection("ebook", "My eBook Library", "Your eBook library is empty.")}
+            {activeSection === "list" && renderSection("list", "My List", data.list)}
+            {activeSection === "wishlist" && renderSection("wishlist", "My Wishlist", "Your wishlist is empty.")}
+            {activeSection === "reviews" && renderSection("reviews", "My Ratings & Reviews", "You haven't submitted any reviews yet.")}
+            {activeSection === "authors" && renderSection("authors", "My Following Authors", "You are not following any authors yet.")}
+          </section>
+        </div>
       </div>
 
       <Footer />
