@@ -257,7 +257,7 @@ const Books = () => {
                   <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
                     <Rating name={`rating-${book.id}`} value={book.rating} readOnly precision={0.5} size="small" />
                   </Box>
-                  { (
+                  { 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <Typography variant="h6" color="primary" fontWeight="bold">
                         $ {book.price.toFixed(2)}
@@ -278,7 +278,7 @@ const Books = () => {
                         Add to cart
                       </Button>
                     </Box>
-                  )}
+                  }
                 </CardContent>
               </Card>
             </Grid>
