@@ -10,7 +10,7 @@ import AdminDashboard from './components/AdminDashboard.jsx';
 import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
 import AddBook from './components/AddBook.jsx';
-//import BookCard from './components/BookCard.jsx';
+import BookCard from './components/BookCard.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -47,6 +47,7 @@ function App() {
         <Route path="/publishersignup" element={<PublisherSignupPage />} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/add-book" element={< AddBook />} />
+        <Route path="/book-card" element={<BookCard />} />
       </Routes>
     </Router>
   );
