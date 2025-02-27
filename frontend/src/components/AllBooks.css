@@ -1,14 +1,14 @@
 /* AllBooks.css */
 .all-books-container {
     margin-top: 60px;
-    background-color: #18181b; /* Tailwind's bg-zinc-900 */
+    background-color: #77778b; /* Tailwind's bg-zinc-900 */
     min-height: auto;
     padding: 2rem 3rem;
   }
   
   .all-books-title {
     font-size: 1.875rem; /* Tailwind's text-3xl */
-    color: #facc15; /* Tailwind's text-yellow-100 */
+    color: #ecebe3; /* Tailwind's text-yellow-100 */
   }
   
   .no-books {
@@ -16,7 +16,7 @@
     align-items: center;
     justify-content: center;
     margin: 2rem 0;
-    color: #facc15; /* Tailwind's text-yellow-100 */
+    color: #f0efee; /* Tailwind's text-yellow-100 */
   }
   
   .books-grid {

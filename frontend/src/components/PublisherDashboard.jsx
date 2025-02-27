@@ -31,20 +31,23 @@ const PublisherDashboard = () => {
         fetchBooks();
     }, []);
 
+    
+    const totalBooks = books.length + allBooks.length;
+    const totalRevenue = [...books, ...allBooks].reduce((sum, book) => sum + parseFloat(book.price || 0), 0).toFixed(2);
+    const totalPublishers = new Set([...books, ...allBooks].map(book => book.publisherId)).size;
+
     return (
         <div className="dashboard-wrapper">
             <Navbar />
             <div className="dashboard">
                 <header className="dashboard-header">
                     <h1 className="dashboard-title">Publisher Dashboard</h1>
-                    <button className="add-book-btn" onClick={() => navigate("/add-book")}>
-                        Add New Book
-                    </button>
+                    <button className="add-book-btn" onClick={() => navigate("/add-book")}>Add New Book</button>
                 </header>
                 <div className="dashboard-container">
-                    <p className="dashboard-item left">Total Books: <span className="dashboard-value">{allBooks.length}</span></p>
-                    <p className="dashboard-item center">Total Publishers: <span className="dashboard-value">0</span></p>
-                    <p className="dashboard-item right">Total Revenue: <span className="dashboard-value">$0.00</span></p>
+                    <p className="dashboard-item left">Total Books: <span className="dashboard-value">{totalBooks}</span></p>
+                    <p className="dashboard-item center">Total Publishers: <span className="dashboard-value">{totalPublishers}</span></p>
+                    <p className="dashboard-item right">Total Revenue: <span className="dashboard-value">${totalRevenue}</span></p>
                 </div>
 
                 {/* Newly Added Books Section */}
