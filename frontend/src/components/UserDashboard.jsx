@@ -557,10 +557,10 @@ const UserDashboard = () => {
           <section className="main-content">
             {activeSection === "profile" && renderProfileSection()}
             {activeSection === "address" && renderAddressSection()}
-            {activeSection === "orders" && renderSection("orders", "My Orders", data.orders)}
-            {activeSection === "ebook" && renderSection("ebook", "My eBook Library", "Your eBook library is empty.")}
-            {activeSection === "list" && renderSection("list", "My List", data.list)}
-            {activeSection === "wishlist" && renderSection("wishlist", "My Wishlist", "Your wishlist is empty.")}
+            {activeSection === "orders" && renderSection("orders", "My Orders", "You Haven't ordered yet.Order Something!!")}
+            {activeSection === "ebook" && renderSection("ebook", "My eBook Library", "Your eBook library is empty..Add some!!")}
+            {activeSection === "list" && renderSection("list", "My List", "Your List  is empty..................Add some!!")}
+            {activeSection === "wishlist" && renderSection("wishlist", "My Wishlist", "Wishlist is Empty.Add something to it.")}
             {activeSection === "reviews" && renderSection("reviews", "My Ratings & Reviews", "You haven't submitted any reviews yet.")}
             {activeSection === "authors" && renderSection("authors", "My Following Authors", "You are not following any authors yet.")}
           </section>
