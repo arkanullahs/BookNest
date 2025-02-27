@@ -36,7 +36,7 @@ const Books = () => {
     {
       id: 1,
       img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738857/image_3_jgpfi8.png",
-      title: "Thunder Stunt",
+      title: "Like A Summer",
       author: "John Stroud",
       price: 19.99,
       originalPrice: 24.99,
@@ -46,7 +46,7 @@ const Books = () => {
     {
       id: 2,
       img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738729/image_rooxq2.png",
-      title: "ALL GOOD NEWS",
+      title:"Think Like A Monk" ,
       author: "Kevin Smiley",
       price: 15.63,
       originalPrice: 16.99,
@@ -56,7 +56,7 @@ const Books = () => {
     {
       id: 3,
       img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738859/image_1_aln1qm.png",
-      title: "Terrible Madness",
+      title: "Shatter Me",
       author: "Tahereh Mafi",
       price: 54.78,
       originalPrice: 70.00,
@@ -66,7 +66,7 @@ const Books = () => {
     {
       id: 4,
       img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738858/image_2_yilukz.png",
-      title: "The Missadventure of David",
+      title: "12 Rules Of Love",
       author: "Jay Shetty",
       price: 24.50,
       originalPrice: 29.99,
@@ -257,7 +257,7 @@ const Books = () => {
                   <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
                     <Rating name={`rating-${book.id}`} value={book.rating} readOnly precision={0.5} size="small" />
                   </Box>
-                  {book.id === 3 && (
+                  { (
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <Typography variant="h6" color="primary" fontWeight="bold">
                         $ {book.price.toFixed(2)}

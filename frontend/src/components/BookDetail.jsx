@@ -44,8 +44,8 @@ const BookDetail = () => {
     {
       id: 3,
       img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738859/image_1_aln1qm.png",
-      title: "Terrible Madness",
-      author: "Unknown Author",
+      title: "Shatter Me",
+      author: "Tahere Mafi",
       price: 45.40,
       originalPrice: 59.90,
       rating: 4.7,
@@ -82,7 +82,7 @@ const BookDetail = () => {
   const mockBookData = {
     id: 2,
     img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738729/image_rooxq2.png",
-    title: "ALL GOOD NEWS",
+    title: "Think Like A Monk",
     author: "Kevin Smiley",
     price: 15.63,
     originalPrice: 16.99,
@@ -91,8 +91,8 @@ const BookDetail = () => {
     likes: 456,
     publisher: "Printarea Studios",
     year: 2019,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    longDescription: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem.",
+    description: "Think Like a Monk by Jay Shetty is a self-help book that blends ancient wisdom with modern practicality. Shetty, a former monk turned motivational speaker, shares lessons he learned during his time in a monastery and how they can be applied to everyday life for greater peace, purpose, and fulfillment.",
+    longDescription: "The book is divided into three sections—Let Go, Grow, and Give—guiding readers through overcoming negativity, cultivating self-discipline, and living with intention. Shetty provides actionable exercises, mindfulness techniques, and inspiring stories to help readers shift their mindset, reduce stress, and build meaningful relationships.At its core, Think Like a Monk teaches how to adopt a monk’s mindset in a modern world, encouraging gratitude, self-awareness, and a focus on service to others.",
     discount: "2%",
     inStock: true,
     freeShipping: true,
@@ -286,6 +286,19 @@ const BookDetail = () => {
               <Button variant="contained" color="primary" sx={{ mr: 2, px: 4 }}>
                 Add to cart
               </Button>
+              <Button 
+  variant="contained" 
+  sx={{ 
+    backgroundColor: "#0A1929",  // Dark blue
+    mr: 2, 
+    px: 4,
+    '&:hover': { backgroundColor: '#061120' } // Slightly darker shade on hover
+  }}
+>
+  Buy Now
+</Button>
+
+
 
               <IconButton onClick={handleFavoriteToggle}>
                 {favorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
