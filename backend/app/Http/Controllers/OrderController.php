@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Order;
@@ -8,6 +9,18 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    public function index()
+    {
+        $orders = Order::where('user_id', auth()->id())
+            ->with(['books' => function($query) {
+                $query->select('books.id', 'title', 'author', 'cover_image');
+            }])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
+        return response()->json($orders);
+    }
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -54,5 +67,19 @@ class OrderController extends Controller
             DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    public function show(Order $order)
+    {
+        // Check if order belongs to user
+        if ($order->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        return response()->json([
+            'order' => $order->load(['books' => function($query) {
+                $query->with('publisher:id,name');
+            }])
+        ]);
     }
 }

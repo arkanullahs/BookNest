@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Services\JwtService;
+use Illuminate\Support\Facades\DB; // Added DB facade import
 
 class BookController extends Controller
 {
