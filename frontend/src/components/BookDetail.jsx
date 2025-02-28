@@ -31,6 +31,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import Navbar from './navbar';
 import Footer from './footer';
+import CheckoutForm from './CheckoutForm';
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -38,7 +39,8 @@ const BookDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [favorite, setFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-
+  // Add this new state for the checkout dialog
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
   // Mock data for related books
   const relatedBooks = [
     {
@@ -132,7 +134,13 @@ const BookDetail = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+  const handleCheckoutOpen = () => {
+    setCheckoutOpen(true);
+  };
 
+  const handleCheckoutClose = () => {
+    setCheckoutOpen(false);
+  };
   return (
     <>
       <Navbar />
@@ -287,16 +295,18 @@ const BookDetail = () => {
                 Add to cart
               </Button>
               <Button 
-  variant="contained" 
-  sx={{ 
-    backgroundColor: "#0A1929",  // Dark blue
-    mr: 2, 
-    px: 4,
-    '&:hover': { backgroundColor: '#061120' } // Slightly darker shade on hover
-  }}
->
-  Buy Now
-</Button>
+    variant="contained" 
+    sx={{ 
+      backgroundColor: "#0A1929",  // Dark blue
+      mr: 2, 
+      px: 4,
+      '&:hover': { backgroundColor: '#061120' } // Slightly darker shade on hover
+    }}
+    onClick={handleCheckoutOpen}
+  >
+    Buy Now
+  </Button>
+
 
 
 
@@ -495,6 +505,12 @@ const BookDetail = () => {
         </Box>
       </Container>
       <Footer />
+      <CheckoutForm 
+    open={checkoutOpen}
+    onClose={handleCheckoutClose}
+    book={book}
+    quantity={quantity}
+  />
     </>
   );
 };

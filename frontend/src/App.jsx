@@ -10,7 +10,8 @@ import AdminDashboard from './components/AdminDashboard.jsx';
 import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
 import Books from './components/books.jsx';
-import BookDetail from './components/BookDetail.jsx'; // Import the BookDetail component
+import BookDetail from './components/BookDetail.jsx'; 
+import CheckoutForm from './components/CheckoutForm.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -35,7 +36,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/landingpage" element={<LandingPage />} />
         <Route path="/books" element={<Books />} />
-        <Route path="/books/:id" element={<BookDetail />} /> {/* Add this route for book details */}
+        <Route path="/books/:id" element={<BookDetail />} />
+        <Route path="/CheckoutForm" element={<CheckoutForm />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
