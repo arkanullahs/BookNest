@@ -7,10 +7,10 @@ import LandingPage from './components/landingpage.jsx';
 import About from './components/about.jsx';
 import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
-import PublisherDashboard from './components/PublisherDashboard.jsx';
+//import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
 import Books from './components/books.jsx';
-import BookDetail from './components/BookDetail.jsx'; 
+import BookDetail from './components/BookDetail.jsx';
 import CheckoutForm from './components/CheckoutForm.jsx';
 
 const HomePage = () => {
@@ -58,14 +58,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/publisher-dashboard"
-          element={
-            <ProtectedRoute allowedRoles={['publisher']}>
-              <PublisherDashboard />
-            </ProtectedRoute>
-          }
-        />
+
 
         <Route path="/publishersignup" element={<PublisherSignupPage />} />
         <Route
