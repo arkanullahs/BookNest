@@ -1,0 +1,43 @@
+.book-card {
+    background-color: #27272a;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+.book-card:hover {
+    transform: scale(1.05);
+}
+
+.book-image-container {
+    background-color: #18181b;
+    border-radius: 4px;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.book-image {
+    height: 25vh;
+}
+
+.book-title {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f4f4f5;
+}
+
+.book-author {
+    margin-top: 0.5rem;
+    color: #a1a1aa;
+    font-weight: 600;
+}
+
+.book-price {
+    margin-top: 0.5rem;
+    color: #a1a1aa;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
