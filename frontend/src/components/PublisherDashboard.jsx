@@ -257,7 +257,7 @@ const PublisherDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
                     title="Total Earnings"
-
+                    value={stats?.total_earnings || 0}
                     icon={<DollarSign className="h-8 w-8 text-green-500" />}
                 />
                 <StatCard
@@ -420,7 +420,7 @@ const PublisherDashboard = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
-                                                <span className="text-sm text-gray-900 mr-1">{book.average_rating?.toFixed(1) || 'N/A'}</span>
+                                                <span className="text-sm text-gray-900 mr-1">{book.average_rating || 'N/A'}</span>
                                                 {book.average_rating && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
                                             </div>
                                         </td>
