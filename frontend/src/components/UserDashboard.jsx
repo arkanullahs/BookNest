@@ -23,7 +23,7 @@ const UserDashboard = () => {
     phone: "",
     isDefault: false
   });
-  
+
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -44,24 +44,11 @@ const UserDashboard = () => {
       return;
     }
     setUser(JSON.parse(userData));
-    
+
     // Set mock addresses for demonstration
     setData(prev => ({
       ...prev,
-      address: [
-        {
-          id: 1,
-          fullName: "John Doe",
-          addressLine1: "123 Book Street",
-          addressLine2: "Apt 45",
-          city: "Bookville",
-          state: "NY",
-          zipCode: "10001",
-          country: "USA",
-          phone: "555-123-4567",
-          isDefault: true
-        }
-      ]
+
     }));
   }, [navigate]);
 
@@ -112,12 +99,12 @@ const UserDashboard = () => {
     // Validate address fields here
     const addressId = Date.now(); // Simple way to generate unique ID
     const updatedAddresses = [...data.address, { ...newAddress, id: addressId }];
-    
+
     setData(prev => ({
       ...prev,
       address: updatedAddresses
     }));
-    
+
     // Reset form
     setNewAddress({
       fullName: "",
@@ -130,7 +117,7 @@ const UserDashboard = () => {
       phone: "",
       isDefault: false
     });
-    
+
     // Here you would typically make an API call to save the address
     console.log("Address added:", newAddress);
   };
@@ -141,7 +128,7 @@ const UserDashboard = () => {
       ...prev,
       address: updatedAddresses
     }));
-    
+
     // Here you would typically make an API call to delete the address
     console.log("Address deleted:", addressId);
   };
@@ -151,12 +138,12 @@ const UserDashboard = () => {
       ...addr,
       isDefault: addr.id === addressId
     }));
-    
+
     setData(prev => ({
       ...prev,
       address: updatedAddresses
     }));
-    
+
     // Here you would typically make an API call to update the default address
     console.log("Default address set:", addressId);
   };
@@ -165,7 +152,7 @@ const UserDashboard = () => {
     return (
       <div className="profile-section">
         <h2>Personal Information</h2>
-        
+
         <div className="profile-photo-container">
           <div className="profile-photo">
             {user?.name ? user.name.charAt(0).toLowerCase() : "e"}
@@ -173,46 +160,46 @@ const UserDashboard = () => {
           <button className="upload-photo-btn" onClick={handleUploadClick}>
             Upload New Photo
           </button>
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            style={{ display: "none" }} 
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
             accept="image/*"
           />
         </div>
-        
+
         <div className="profile-form">
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="firstName">First Name</label>
-              <input 
-                type="text" 
-                id="firstName" 
-                defaultValue={user?.name?.split(' ')[0] || "elman"} 
+              <input
+                type="text"
+                id="firstName"
+                defaultValue={user?.name?.split(' ')[0] || "elman"}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="lastName">Last Name</label>
-              <input 
-                type="text" 
-                id="lastName" 
-                defaultValue={user?.name?.split(' ')[1] || ""} 
+              <input
+                type="text"
+                id="lastName"
+                defaultValue={user?.name?.split(' ')[1] || ""}
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="dob">Your Date of Birth</label>
-              <input 
-                type="text" 
-                id="dob" 
-                placeholder="mm/dd/yyyy" 
+              <input
+                type="text"
+                id="dob"
+                placeholder="mm/dd/yyyy"
               />
             </div>
-            
+
             <div className="form-group">
               <label>Gender</label>
               <div className="radio-group">
@@ -225,52 +212,52 @@ const UserDashboard = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
-              <input 
-                type="email" 
-                id="email" 
-                defaultValue={user?.email || "elmanaust@gmail.com"} 
+              <input
+                type="email"
+                id="email"
+                defaultValue={user?.email || "elmanaust@gmail.com"}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="phone">Mobile Number</label>
-              <input 
-                type="text" 
-                id="phone" 
+              <input
+                type="text"
+                id="phone"
               />
             </div>
           </div>
-          
+
           <h3>Password</h3>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="newPassword">New Password</label>
               <div className="password-input">
-                <input 
-                  type="password" 
-                  id="newPassword" 
+                <input
+                  type="password"
+                  id="newPassword"
                 />
                 <span className="password-toggle">👁️</span>
               </div>
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <div className="password-input">
-                <input 
-                  type="password" 
-                  id="confirmPassword" 
+                <input
+                  type="password"
+                  id="confirmPassword"
                 />
                 <span className="password-toggle">👁️</span>
               </div>
             </div>
           </div>
-          
+
           <div className="form-actions">
             <button className="save-btn">Save</button>
           </div>
@@ -288,7 +275,7 @@ const UserDashboard = () => {
             + Add New Address
           </button>
         </div>
-        
+
         {data.address.length > 0 ? (
           <div className="addresses-container">
             {data.address.map((address) => (
@@ -300,23 +287,23 @@ const UserDashboard = () => {
                 <p>{address.city}, {address.state} {address.zipCode}</p>
                 <p>{address.country}</p>
                 <p>Phone: {address.phone}</p>
-                
+
                 <div className="address-actions">
                   {!address.isDefault && (
-                    <button 
+                    <button
                       className="default-btn"
                       onClick={() => handleSetDefaultAddress(address.id)}
                     >
                       Set as Default
                     </button>
                   )}
-                  <button 
+                  <button
                     className="edit-btn"
                     onClick={() => console.log("Edit address:", address.id)}
                   >
                     Edit
                   </button>
-                  <button 
+                  <button
                     className="delete-btn"
                     onClick={() => handleDeleteAddress(address.id)}
                   >
@@ -331,15 +318,15 @@ const UserDashboard = () => {
             <p>You don't have any saved addresses yet.</p>
           </div>
         )}
-        
+
         <div id="addAddressForm" className="address-form" style={{ display: 'none' }}>
           <h3>Add New Address</h3>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="fullName"
                 name="fullName"
                 value={newAddress.fullName}
@@ -347,12 +334,12 @@ const UserDashboard = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="addressLine1">Address Line 1</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="addressLine1"
                 name="addressLine1"
                 value={newAddress.addressLine1}
@@ -361,12 +348,12 @@ const UserDashboard = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="addressLine2">Address Line 2 (Optional)</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="addressLine2"
                 name="addressLine2"
                 value={newAddress.addressLine2}
@@ -375,23 +362,23 @@ const UserDashboard = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="city">City</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="city"
                 name="city"
                 value={newAddress.city}
                 onChange={handleAddressChange}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="state">State/Province/Region</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="state"
                 name="state"
                 value={newAddress.state}
@@ -399,23 +386,23 @@ const UserDashboard = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="zipCode">ZIP Code</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="zipCode"
                 name="zipCode"
                 value={newAddress.zipCode}
                 onChange={handleAddressChange}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="country">Country</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="country"
                 name="country"
                 value={newAddress.country}
@@ -423,12 +410,12 @@ const UserDashboard = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="phone">Phone Number</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="phone"
                 name="phone"
                 value={newAddress.phone}
@@ -436,11 +423,11 @@ const UserDashboard = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group checkbox-group">
               <label className="checkbox-label">
-                <input 
+                <input
                   type="checkbox"
                   name="isDefault"
                   checked={newAddress.isDefault}
@@ -450,15 +437,15 @@ const UserDashboard = () => {
               </label>
             </div>
           </div>
-          
+
           <div className="form-actions">
-            <button 
+            <button
               className="cancel-btn"
               onClick={() => document.getElementById('addAddressForm').style.display = 'none'}
             >
               Cancel
             </button>
-            <button 
+            <button
               className="save-btn"
               onClick={handleAddAddress}
             >
@@ -500,7 +487,7 @@ const UserDashboard = () => {
                 <h3>{user?.name || "elman"}</h3>
               </div>
             </div>
-            
+
             <ul className="sidebar-menu">
               <li
                 className={activeSection === "profile" ? "active" : ""}
