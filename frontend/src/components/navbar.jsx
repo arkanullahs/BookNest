@@ -13,6 +13,7 @@ const Navbar = () => {
       <div className="navbar-center">
         <ul className="navbar-links">
           <li><Link to="/landingpage">Home</Link></li>
+          <li><Link to="/books">Books</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/about">FAQ</Link></li>
           <li>

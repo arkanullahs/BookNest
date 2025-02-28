@@ -9,6 +9,8 @@ import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
 import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
+import Books from './components/books.jsx';
+import BookDetail from './components/BookDetail.jsx'; // Import the BookDetail component
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/books" element={<Books />} />
+        <Route path="/books/:id" element={<BookDetail />} /> {/* Add this route for book details */}
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -89,6 +93,5 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   return children;
 };
-
 
 export default App;
