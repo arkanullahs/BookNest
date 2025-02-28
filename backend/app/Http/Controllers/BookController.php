@@ -28,34 +28,33 @@ class BookController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'cover_image' => 'required|image|max:2048',
-            'stock_quantity' => 'required|integer|min:0',
-            'isbn' => 'required|string|unique:books',
-            'author' => 'required|string|max:255',
-            'published_year' => 'required|integer|min:1800|max:' . (date('Y') + 1)
-        ]);
-
-        // Upload image to Cloudinary
-        $uploadedFile = $request->file('cover_image');
-        $result = Cloudinary::upload($uploadedFile->getRealPath(), [
-            'folder' => 'books',
-            'transformation' => [
-                'width' => 800,
-                'height' => 1200,
-                'crop' => 'limit'
-            ]
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|numeric|min:0.01',
+        'stock_quantity' => 'required|integer|min:0',
+        'isbn' => 'required|string|unique:books|max:20',
+        'published_year' => 'required|integer|min:1800|max:' . (date('Y') + 1),
+        'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+    
+    try {
+        if ($request->hasFile('cover_image')) {
+            // Upload image to Cloudinary
+            $uploadedFileUrl = Cloudinary::upload($request->file('cover_image')->getRealPath(), [
+                'folder' => 'books'
+            ])->getSecurePath();
+        } else {
+            return response()->json(['error' => 'Cover image not uploaded properly'], 400);
+        }
 
         $book = Book::create([
             'title' => $request->title,
             'description' => $request->description,
             'price' => $request->price,
-            'cover_image' => $result->getSecurePath(),
+            'cover_image' => $uploadedFileUrl,
             'publisher_id' => auth()->id(),
             'stock_quantity' => $request->stock_quantity,
             'isbn' => $request->isbn,
@@ -63,66 +62,101 @@ class BookController extends Controller
             'published_year' => $request->published_year
         ]);
 
-        return response()->json($book, 201);
+        return response()->json(['message' => 'Book added successfully!', 'book' => $book], 201);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to add book', 'details' => $e->getMessage()], 500);
+    }
+}
+
+public function update(Request $request, Book $book)
+{
+    if ($book->publisher_id !== auth()->id()) {
+        return response()->json(['message' => 'Unauthorized'], 403);
     }
 
-    public function update(Request $request, Book $book)
-    {
-        if ($book->publisher_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+    $request->validate([
+        'title' => 'string|max:255',
+        'description' => 'string',
+        'price' => 'numeric|min:0',
+        'cover_image' => 'sometimes|image|max:2048',
+        'stock_quantity' => 'integer|min:0',
+        'isbn' => 'string|unique:books,isbn,' . $book->id,
+        'author' => 'string|max:255',
+        'published_year' => 'integer|min:1800|max:' . (date('Y') + 1)
+    ]);
 
-        $request->validate([
-            'title' => 'string|max:255',
-            'description' => 'string',
-            'price' => 'numeric|min:0',
-            'cover_image' => 'sometimes|image|max:2048',
-            'stock_quantity' => 'integer|min:0',
-            'isbn' => 'string|unique:books,isbn,' . $book->id,
-            'author' => 'string|max:255',
-            'published_year' => 'integer|min:1800|max:' . (date('Y') + 1)
-        ]);
-
-        if ($request->hasFile('cover_image')) {
-            // Delete old image from Cloudinary
-            $oldImagePath = $book->cover_image;
-            if ($oldImagePath) {
-                $publicId = Cloudinary::getPublicId($oldImagePath);
+    if ($request->hasFile('cover_image')) {
+        // If there's an existing image, extract the public ID properly
+        if ($book->cover_image) {
+            try {
+                // Extract public ID from Cloudinary URL
+                $parsedUrl = parse_url($book->cover_image);
+                $pathParts = explode('/', $parsedUrl['path']);
+                
+                // Format: .../v1/folder/public_id.extension
+                // Remove extension from the last part
+                $lastPart = end($pathParts);
+                $publicIdParts = explode('.', $lastPart);
+                array_pop($publicIdParts); // Remove extension
+                
+                // Reconstruct the public ID including folder
+                $folderPath = array_slice($pathParts, -2, 1)[0]; // Get folder name
+                $publicId = $folderPath . '/' . implode('.', $publicIdParts);
+                
+                // Delete the old image
                 Cloudinary::destroy($publicId);
+            } catch (\Exception $e) {
+                // Log error but continue with the update
+                \Log::error('Failed to delete old Cloudinary image: ' . $e->getMessage());
             }
-
-            // Upload new image
-            $uploadedFile = $request->file('cover_image');
-            $result = Cloudinary::upload($uploadedFile->getRealPath(), [
-                'folder' => 'books',
-                'transformation' => [
-                    'width' => 800,
-                    'height' => 1200,
-                    'crop' => 'limit'
-                ]
-            ]);
-            $book->cover_image = $result->getSecurePath();
         }
-
-        $book->update($request->except('cover_image'));
-        return response()->json($book);
+            
+        // Upload new image to Cloudinary
+        $uploadedFileUrl = Cloudinary::upload($request->file('cover_image')->getRealPath(), [
+            'folder' => 'books'
+        ])->getSecurePath();
+        
+        $book->cover_image = $uploadedFileUrl;
     }
+
+    $book->update($request->except('cover_image'));
+    return response()->json($book);
+}
+
 
     public function destroy(Book $book)
-    {
-        if ($book->publisher_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        // Delete image from Cloudinary
-        if ($book->cover_image) {
-            $publicId = Cloudinary::getPublicId($book->cover_image);
-            Cloudinary::destroy($publicId);
-        }
-
-        $book->delete();
-        return response()->json(['message' => 'Book deleted successfully']);
+{
+    if ($book->publisher_id !== auth()->id()) {
+        return response()->json(['message' => 'Unauthorized'], 403);
     }
+
+    // Delete image from Cloudinary if it exists
+    if ($book->cover_image) {
+        try {
+            // Extract public ID from Cloudinary URL
+            $parsedUrl = parse_url($book->cover_image);
+            $pathParts = explode('/', $parsedUrl['path']);
+            
+            // Format: .../v1/folder/public_id.extension
+            // Remove extension from the last part
+            $lastPart = end($pathParts);
+            $publicIdParts = explode('.', $lastPart);
+            array_pop($publicIdParts); // Remove extension
+            
+            // Reconstruct the public ID including folder
+            $folderPath = array_slice($pathParts, -2, 1)[0]; // Get folder name
+            $publicId = $folderPath . '/' . implode('.', $publicIdParts);
+            
+            Cloudinary::destroy($publicId);
+        } catch (\Exception $e) {
+            // Log error but continue with the deletion
+            \Log::error('Failed to delete Cloudinary image: ' . $e->getMessage());
+        }
+    }
+
+    $book->delete();
+    return response()->json(['message' => 'Book deleted successfully']);
+}
     public function publisherBooks()
     {
         $books = Book::where('publisher_id', auth()->id())

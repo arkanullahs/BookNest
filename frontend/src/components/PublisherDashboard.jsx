@@ -41,7 +41,9 @@ const PublisherDashboard = () => {
         description: '',
         price: '',
         stock_quantity: '',
-        cover_image: null
+        cover_image: null,
+        isbn: '', // Add ISBN field
+        published_year: '' // Add published year
     });
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,11 +97,33 @@ const PublisherDashboard = () => {
 
     const validateForm = () => {
         const errors = {};
-        if (!bookFormData.title) errors.title = 'Title is required';
-        if (!bookFormData.price) errors.price = 'Price is required';
-        if (isNaN(parseFloat(bookFormData.price))) errors.price = 'Price must be a number';
-        if (!bookFormData.stock_quantity) errors.stock_quantity = 'Stock quantity is required';
-        if (isNaN(parseInt(bookFormData.stock_quantity))) errors.stock_quantity = 'Stock quantity must be a number';
+        if (!bookFormData.title.trim()) errors.title = 'Title is required';
+        if (!bookFormData.author.trim()) errors.author = 'Author is required';
+        if (!bookFormData.description.trim()) errors.description = 'Description is required';
+        if (!bookFormData.isbn.trim()) errors.isbn = 'ISBN is required';
+        if (!bookFormData.published_year) errors.published_year = 'Published year is required';
+
+        // Price validation
+        if (!bookFormData.price) {
+            errors.price = 'Price is required';
+        } else if (isNaN(parseFloat(bookFormData.price))) {
+            errors.price = 'Price must be a number';
+        }
+
+        // Stock quantity validation
+        if (!bookFormData.stock_quantity) {
+            errors.stock_quantity = 'Stock quantity is required';
+        } else if (isNaN(parseInt(bookFormData.stock_quantity))) {
+            errors.stock_quantity = 'Stock quantity must be a number';
+        }
+
+        // Published year validation
+        const currentYear = new Date().getFullYear();
+        if (bookFormData.published_year &&
+            (parseInt(bookFormData.published_year) < 1800 ||
+                parseInt(bookFormData.published_year) > currentYear + 1)) {
+            errors.published_year = `Year must be between 1800 and ${currentYear + 1}`;
+        }
 
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
@@ -161,6 +185,8 @@ const PublisherDashboard = () => {
             formData.append('description', bookFormData.description);
             formData.append('price', bookFormData.price);
             formData.append('stock_quantity', bookFormData.stock_quantity);
+            formData.append('isbn', bookFormData.isbn);
+            formData.append('published_year', bookFormData.published_year);
 
             if (bookFormData.cover_image) {
                 formData.append('cover_image', bookFormData.cover_image);
@@ -560,6 +586,38 @@ const PublisherDashboard = () => {
                                         </div>
                                     )}
                                 </div>
+                                {/* ISBN Field */}
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="isbn">
+                                        ISBN *
+                                    </label>
+                                    <input
+                                        id="isbn"
+                                        name="isbn"
+                                        type="text"
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={bookFormData.isbn}
+                                        onChange={handleInputChange}
+                                    />
+                                    {formErrors.isbn && <p className="text-red-500 text-xs mt-1">{formErrors.isbn}</p>}
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="published_year">
+                                        Published Year *
+                                    </label>
+                                    <input
+                                        id="published_year"
+                                        name="published_year"
+                                        type="number"
+                                        min="1800"
+                                        max={new Date().getFullYear() + 1}
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={bookFormData.published_year}
+                                        onChange={handleInputChange}
+                                    />
+                                    {formErrors.published_year && <p className="text-red-500 text-xs mt-1">{formErrors.published_year}</p>}
+                                </div>
+
                             </div>
                             <div className="px-6 py-4 bg-gray-50 text-right">
                                 <button

@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
         $table->string('isbn')->unique();
         $table->string('author');
         $table->integer('published_year');
+        $table->string('category')->default('Uncategorized')->change();
         $table->timestamps();
     });
 
@@ -73,5 +74,9 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('books');
+        Schema::dropIfExists('comments');
+        Schema::dropIfExists('orders');
+        Schema::dropIfExists('order_items');
     }
 }
