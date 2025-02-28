@@ -1,0 +1,67 @@
+.book-details-container {
+    padding: 2rem 3rem;
+    background-color: #18181b;
+    display: flex;
+    gap: 2rem;
+}
+
+.book-image-container {
+    background-color: #27272a;
+    border-radius: 8px;
+    padding: 1rem;
+    height: 88vh;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-image {
+    height: 70vh;
+}
+
+.book-info {
+    padding: 1rem;
+    width: 50%;
+}
+
+.book-title {
+    font-size: 2.5rem;
+    color: #d4d4d8;
+    font-weight: 600;
+}
+
+.book-author {
+    color: #a1a1aa;
+    margin-top: 0.25rem;
+}
+
+.book-description {
+    color: #71717a;
+    margin-top: 1rem;
+    font-size: 1.25rem;
+}
+
+.book-language {
+    display: flex;
+    align-items: center;
+    color: #a1a1aa;
+    margin-top: 1rem;
+}
+
+.language-icon {
+    margin-right: 0.75rem;
+}
+
+.book-price {
+    margin-top: 1rem;
+    color: #f4f4f5;
+    font-size: 1.875rem;
+    font-weight: 600;
+}
+
+.loading-text {
+    text-align: center;
+    color: #a1a1aa;
+    margin-top: 2rem;
+}
