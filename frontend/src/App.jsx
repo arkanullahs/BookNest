@@ -11,6 +11,7 @@ import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
 import AddBook from './components/AddBook.jsx';
 import BookCard from './components/BookCard.jsx';
+import ViewBookDetails  from './components/viewBookDetails.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/add-book" element={< AddBook />} />
         <Route path="/book-card" element={<BookCard />} />
+        <Route path="/view-book" element={<ViewBookDetails />} />
       </Routes>
     </Router>
   );
