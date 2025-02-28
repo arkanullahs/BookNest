@@ -7,20 +7,15 @@
   }
   
   body {
-    background-color: #f5f5f5;
+    background-color: #fffffe;
     color: #333;
   }
   
-  .dashboard-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    width: 120%;
-  }
+
   
   .dashboard-wrapper {
     width: 100%;
-    background-color: #f5f5f5;
+    background-color: #FAF9F6;
     padding: 20px;
   }
   
