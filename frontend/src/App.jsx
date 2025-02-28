@@ -7,14 +7,12 @@ import LandingPage from './components/landingpage.jsx';
 import About from './components/about.jsx';
 import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
-import PublisherDashboard from './components/PublisherDashboard/PublisherDashboard.jsx';
+import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
 import Books from './components/books.jsx';
 import BookDetail from './components/BookDetail.jsx'; 
 import CheckoutForm from './components/CheckoutForm.jsx';
-import AddBook from './components/PublisherDashboard/AddBook.jsx';
-import BookCard from './components/PublisherDashboard/BookCard.jsx';
-import ViewBookDetails  from './components/PublisherDashboard/viewBookDetails.jsx';
+
 const HomePage = () => {
   const navigate = useNavigate();
 
@@ -44,9 +42,6 @@ function App() {
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="/add-book" element={< AddBook />} />
-        <Route path="/book-card" element={<BookCard />} />
-        <Route path="/view-book" element={<ViewBookDetails />} />
         <Route
           path="/admin-dashboard"
           element={
