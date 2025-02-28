@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./AddBook.css"; // Import the CSS file
-import Navbar from "./navbar.jsx";
-import Footer from "./footer.jsx";
+import Navbar from "../navbar.jsx";
+import Footer from "../footer.jsx";
 
 const AddBook = () => {
   const [Data, setData] = useState({

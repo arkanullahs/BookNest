@@ -7,11 +7,11 @@ import LandingPage from './components/landingpage.jsx';
 import About from './components/about.jsx';
 import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
-import PublisherDashboard from './components/PublisherDashboard.jsx';
+import PublisherDashboard from './components/PublisherDashboard/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
-import AddBook from './components/AddBook.jsx';
-import BookCard from './components/BookCard.jsx';
-import ViewBookDetails  from './components/viewBookDetails.jsx';
+import AddBook from './components/PublisherDashboard/AddBook.jsx';
+import BookCard from './components/PublisherDashboard/BookCard.jsx';
+import ViewBookDetails  from './components/PublisherDashboard/viewBookDetails.jsx';
 
 const HomePage = () => {
   const navigate = useNavigate();

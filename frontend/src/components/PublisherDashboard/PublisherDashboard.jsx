@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Navbar from "./navbar";
-import Footer from "./footer";
+import Navbar from "../navbar";
+import Footer from "../footer";
 import BookCard from "./BookCard";
 import axios from "axios";
 import "./PublisherDashboard.css";
