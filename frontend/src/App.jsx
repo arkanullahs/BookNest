@@ -15,7 +15,6 @@ import CheckoutForm from './components/CheckoutForm.jsx';
 import AddBook from './components/PublisherDashboard/AddBook.jsx';
 import BookCard from './components/PublisherDashboard/BookCard.jsx';
 import ViewBookDetails  from './components/PublisherDashboard/viewBookDetails.jsx';
-
 const HomePage = () => {
   const navigate = useNavigate();
 
