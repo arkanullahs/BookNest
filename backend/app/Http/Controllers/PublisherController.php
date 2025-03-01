@@ -12,10 +12,10 @@ class PublisherController extends Controller
     {
         $publisherId = auth()->id();
         
-        // Get total books published
+        
         $totalBooks = Book::where('publisher_id', $publisherId)->count();
         
-        // Get book sales summary
+        
         $salesSummary = DB::table('order_items')
             ->join('books', 'order_items.book_id', '=', 'books.id')
             ->where('books.publisher_id', $publisherId)
@@ -25,7 +25,7 @@ class PublisherController extends Controller
             )
             ->first();
             
-        // Get top selling books
+        
         $topBooks = Book::where('publisher_id', $publisherId)
             ->withCount(['orders as total_sold' => function($query) {
                 $query->select(DB::raw('SUM(order_items.quantity)'));

@@ -14,21 +14,21 @@ class UserController extends Controller
     {
         $userId = auth()->id();
         
-        // Get order summary
+        
         $orderCount = Order::where('user_id', $userId)->count();
         $totalSpent = Order::where('user_id', $userId)->sum('total_amount');
         
-        // Get latest orders
+        
         $latestOrders = Order::where('user_id', $userId)
             ->with(['books:id,title,author,cover_image'])
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
             
-        // Get comment count
+        
         $commentCount = Comment::where('user_id', $userId)->count();
         
-        // Get recommended books based on previous purchases
+        
         $recommendedBooks = $this->getRecommendedBooks($userId);
         
         return response()->json([
@@ -42,7 +42,7 @@ class UserController extends Controller
     
     private function getRecommendedBooks($userId)
     {
-        // Get genres/authors the user has purchased or rated highly
+        
         $purchasedBookIds = Order::where('user_id', $userId)
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->pluck('order_items.book_id')
@@ -56,7 +56,7 @@ class UserController extends Controller
         $userBookIds = array_merge($purchasedBookIds, $highlyRatedBookIds);
         
         if (empty($userBookIds)) {
-            // If no purchase history, return popular books
+            
             return Book::withCount(['orders as popularity' => function($query) {
                 $query->select(DB::raw('SUM(order_items.quantity)'));
             }])
@@ -65,7 +65,7 @@ class UserController extends Controller
             ->get();
         }
         
-        // Get authors and similar books
+        
         $userBooks = Book::whereIn('id', $userBookIds)->get();
         $authors = $userBooks->pluck('author')->toArray();
         

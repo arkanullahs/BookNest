@@ -14,7 +14,7 @@ class PublisherDashboardController extends Controller
     {
         $publisherId = auth()->id();
 
-        // Get total earnings and books sold
+        
         $stats = DB::table('order_items')
             ->join('books', 'order_items.book_id', '=', 'books.id')
             ->where('books.publisher_id', $publisherId)
@@ -24,7 +24,7 @@ class PublisherDashboardController extends Controller
             )
             ->first();
 
-        // Get latest comments
+        
         $latestComments = Book::where('publisher_id', $publisherId)
             ->with(['comments' => function($query) {
                 $query->latest()->with('user:id,name');
@@ -34,7 +34,7 @@ class PublisherDashboardController extends Controller
             ->flatten()
             ->take(10);
 
-        // Get books performance
+        
         $booksPerformance = Book::where('publisher_id', $publisherId)
             ->withCount('orders as total_sales')
             ->withAvg('comments as average_rating', 'rating')
@@ -51,7 +51,7 @@ class PublisherDashboardController extends Controller
     public function getEarnings(Request $request)
     {
         $publisherId = auth()->id();
-        $period = $request->input('period', 'monthly'); // monthly, weekly, yearly
+        $period = $request->input('period', 'monthly'); 
         
         $query = DB::table('order_items')
             ->join('books', 'order_items.book_id', '=', 'books.id')
@@ -73,7 +73,7 @@ class PublisherDashboardController extends Controller
             )
             ->groupBy(DB::raw('YEAR(orders.created_at)'))
             ->orderBy('time_period', 'asc');
-        } else { // monthly default
+        } else { 
             $query->select(
                 DB::raw('DATE_FORMAT(orders.created_at, "%Y-%m") as time_period'),
                 DB::raw('SUM(order_items.quantity * order_items.price_at_time_of_purchase) as earnings')

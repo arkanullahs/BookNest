@@ -10,11 +10,10 @@ import {
     AlertCircle, Loader, User
 } from 'lucide-react';
 
-import './dashboard.css'; // Import your raw CSS file
+import './dashboard.css'; 
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
-// Configure axios with token from localStorage
 const api = axios.create({
     baseURL: API_BASE_URL
 });
@@ -28,7 +27,7 @@ api.interceptors.request.use(config => {
     return config;
 });
 
-// Add response interceptor for debugging
+
 api.interceptors.response.use(
     response => {
         console.debug('API Response Success:', response.config.url, response.status);
@@ -41,7 +40,7 @@ api.interceptors.response.use(
 );
 
 const PublisherDashboard = () => {
-    // State variables
+    
     const [loading, setLoading] = useState({
         dashboard: true,
         earnings: false,
@@ -56,7 +55,7 @@ const PublisherDashboard = () => {
     const [comments, setComments] = useState([]);
     const [earningsPeriod, setEarningsPeriod] = useState('monthly');
 
-    // State for book operations
+    
     const [showBookForm, setShowBookForm] = useState(false);
     const [currentBook, setCurrentBook] = useState(null);
     const [bookFormData, setBookFormData] = useState({
@@ -73,7 +72,7 @@ const PublisherDashboard = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [actionSuccess, setActionSuccess] = useState(null);
 
-    // Function to fetch data with error handling
+    
     const fetchWithErrorHandling = async (endpoint, stateKey, dataKey = null) => {
         try {
             setLoading(prev => ({ ...prev, [stateKey]: true }));
@@ -82,15 +81,15 @@ const PublisherDashboard = () => {
             const response = await api.get(endpoint);
             console.debug(`Successfully fetched ${endpoint}`, response.data);
 
-            // Clear any existing errors for this endpoint
+            
             setErrors(prev => ({ ...prev, [stateKey]: null }));
 
-            // Return the data or the full response based on dataKey
+            
             return dataKey ? response.data[dataKey] : response.data;
         } catch (error) {
             console.error(`Error fetching ${endpoint}:`, error);
 
-            // Set appropriate error message
+            
             setErrors(prev => ({
                 ...prev,
                 [stateKey]: error.response?.data?.message || error.message || `Failed to fetch ${stateKey} data`
@@ -102,47 +101,47 @@ const PublisherDashboard = () => {
         }
     };
 
-    // Main data fetching function
+    
     const fetchDashboardData = async () => {
         setLoading(prev => ({ ...prev, dashboard: true }));
         console.debug('Fetching all dashboard data...');
 
         try {
-            // Fetch all data in parallel including comments with full details
+            
             const [statsData, earningsData, booksData, commentsResponse] = await Promise.all([
                 fetchWithErrorHandling('/publisher/dashboard/stats', 'stats'),
                 fetchWithErrorHandling(`/publisher/earnings?period=${earningsPeriod}`, 'earnings'),
                 fetchWithErrorHandling('/publisher/books', 'books'),
-                fetchWithErrorHandling('/publisher/comments?include=user,book', 'comments') // Fetch comments with user and book details
+                fetchWithErrorHandling('/publisher/comments?include=user,book', 'comments') 
             ]);
 
-            // Update state with fetched data
+            
             if (statsData) setStats(statsData);
             if (earningsData) setEarnings(earningsData.earnings || []);
             if (booksData) setBooks(booksData.data || []);
-            if (commentsResponse) setComments(commentsResponse.comments || []); // Use response directly now
+            if (commentsResponse) setComments(commentsResponse.comments || []); 
 
             console.debug('All dashboard data fetched successfully');
         } catch (error) {
             console.error('Error in fetchDashboardData:', error);
-            // General dashboard error - already handled by individual fetch functions
+            
         } finally {
             setLoading(prev => ({ ...prev, dashboard: false }));
         }
     };
 
-    // Fetch data on component mount and when earningsPeriod changes
+    
     useEffect(() => {
         fetchDashboardData();
     }, [earningsPeriod]);
 
-    // Fetch earnings data when period changes
+    
     const handleEarningsPeriodChange = async (period) => {
         setEarningsPeriod(period);
-        // The main useEffect will handle the data fetching
+        
     };
 
-    // Book form handlers
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setBookFormData(prev => ({
@@ -161,28 +160,28 @@ const PublisherDashboard = () => {
     const validateForm = () => {
         const errors = {};
 
-        // Required fields validation
+        
         if (!bookFormData.title.trim()) errors.title = 'Title is required';
         if (!bookFormData.author.trim()) errors.author = 'Author is required';
         if (!bookFormData.description.trim()) errors.description = 'Description is required';
         if (!bookFormData.isbn.trim()) errors.isbn = 'ISBN is required';
         if (!bookFormData.published_year) errors.published_year = 'Published year is required';
 
-        // Price validation
+        
         if (!bookFormData.price) {
             errors.price = 'Price is required';
         } else if (isNaN(parseFloat(bookFormData.price)) || parseFloat(bookFormData.price) < 0) {
             errors.price = 'Price must be a positive number';
         }
 
-        // Stock quantity validation
+        
         if (!bookFormData.stock_quantity) {
             errors.stock_quantity = 'Stock quantity is required';
         } else if (isNaN(parseInt(bookFormData.stock_quantity)) || parseInt(bookFormData.stock_quantity) < 0) {
             errors.stock_quantity = 'Stock quantity must be a positive number';
         }
 
-        // Published year validation
+        
         const currentYear = new Date().getFullYear();
         if (bookFormData.published_year &&
             (parseInt(bookFormData.published_year) < 1800 ||
@@ -239,7 +238,7 @@ const PublisherDashboard = () => {
         setTimeout(() => setActionSuccess(null), 3000);
     };
 
-    // CRUD operations
+    
     const handleSubmitBook = async (e) => {
         e.preventDefault();
 
@@ -267,7 +266,7 @@ const PublisherDashboard = () => {
             let response;
 
             if (currentBook) {
-                // Update existing book
+                
                 console.debug(`Updating book ID: ${currentBook.id}`);
                 response = await api.post(`/books/${currentBook.id}?_method=PUT`, formData, {
                     headers: {
@@ -275,7 +274,7 @@ const PublisherDashboard = () => {
                     }
                 });
 
-                // Update the books array
+                
                 setBooks(books.map(book =>
                     book.id === currentBook.id ? response.data.data : book
                 ));
@@ -283,7 +282,7 @@ const PublisherDashboard = () => {
                 showSuccessMessage('Book updated successfully!');
                 console.debug('Book updated successfully', response.data);
             } else {
-                // Create new book
+                
                 console.debug('Creating new book');
                 response = await api.post('/books', formData, {
                     headers: {
@@ -291,7 +290,7 @@ const PublisherDashboard = () => {
                     }
                 });
 
-                // Add the new book to the books array
+                
                 setBooks([...books, response.data.data]);
 
                 showSuccessMessage('Book added successfully!');
@@ -303,7 +302,7 @@ const PublisherDashboard = () => {
         } catch (error) {
             console.error('Error saving book:', error);
 
-            // Handle validation errors from backend
+            
             if (error.response && error.response.data && error.response.data.errors) {
                 setFormErrors(error.response.data.errors);
                 console.debug('Validation errors:', error.response.data.errors);
@@ -316,8 +315,8 @@ const PublisherDashboard = () => {
         } finally {
             setIsSubmitting(false);
             setLoading(prev => ({ ...prev, bookAction: false }));
-            // **ADD THIS LINE:**
-            refreshSection('books'); // Refresh the books section after book operation
+            
+            refreshSection('books'); 
         }
     };
 
@@ -332,7 +331,7 @@ const PublisherDashboard = () => {
             console.debug(`Deleting book ID: ${bookId}`);
             await api.delete(`/books/${bookId}`);
 
-            // Remove the deleted book from the books array
+            
             setBooks(books.filter(book => book.id !== bookId));
 
             showSuccessMessage('Book deleted successfully!');
@@ -348,7 +347,7 @@ const PublisherDashboard = () => {
         }
     };
 
-    // Refreshes a specific section of the dashboard
+    
     const refreshSection = async (section) => {
         console.debug(`Refreshing ${section} section`);
 
@@ -374,7 +373,7 @@ const PublisherDashboard = () => {
         }
     };
 
-    // Loading screen for initial data loading
+    
     if (loading.dashboard) {
         return (
             <div className="loading-screen-container">
@@ -758,7 +757,7 @@ const PublisherDashboard = () => {
                                                 src={book.cover_image}
                                                 alt={book.title}
                                                 className="book-cover-image"
-                                                onError={(e) => { e.target.onerror = null; e.target.src = 'placeholder-cover.png'; }} // Placeholder if image fails
+                                                onError={(e) => { e.target.onerror = null; e.target.src = 'placeholder-cover.png'; }} 
                                             />
                                         </div>
                                         <div className="book-details">
@@ -877,7 +876,7 @@ const PublisherDashboard = () => {
     );
 };
 
-// StatCard Component
+
 const StatCard = ({ title, value, icon, isLoading, error, onRefresh }) => (
     <div className="stat-card">
         <div className="stat-card__header">

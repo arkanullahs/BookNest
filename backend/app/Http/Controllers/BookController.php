@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Services\JwtService;
-use Illuminate\Support\Facades\DB; // Added DB facade import
+use Illuminate\Support\Facades\DB; 
 
 class BookController extends Controller
 {
@@ -42,7 +42,7 @@ class BookController extends Controller
     
     try {
         if ($request->hasFile('cover_image')) {
-            // Upload image to Cloudinary
+            
             $uploadedFileUrl = Cloudinary::upload($request->file('cover_image')->getRealPath(), [
                 'folder' => 'books'
             ])->getSecurePath();
@@ -86,32 +86,32 @@ public function update(Request $request, Book $book)
     ]);
 
     if ($request->hasFile('cover_image')) {
-        // If there's an existing image, extract the public ID properly
+        
         if ($book->cover_image) {
             try {
-                // Extract public ID from Cloudinary URL
+                
                 $parsedUrl = parse_url($book->cover_image);
                 $pathParts = explode('/', $parsedUrl['path']);
                 
-                // Format: .../v1/folder/public_id.extension
-                // Remove extension from the last part
+                
+                
                 $lastPart = end($pathParts);
                 $publicIdParts = explode('.', $lastPart);
-                array_pop($publicIdParts); // Remove extension
+                array_pop($publicIdParts); 
                 
-                // Reconstruct the public ID including folder
-                $folderPath = array_slice($pathParts, -2, 1)[0]; // Get folder name
+                
+                $folderPath = array_slice($pathParts, -2, 1)[0]; 
                 $publicId = $folderPath . '/' . implode('.', $publicIdParts);
                 
-                // Delete the old image
+                
                 Cloudinary::destroy($publicId);
             } catch (\Exception $e) {
-                // Log error but continue with the update
+                
                 \Log::error('Failed to delete old Cloudinary image: ' . $e->getMessage());
             }
         }
             
-        // Upload new image to Cloudinary
+        
         $uploadedFileUrl = Cloudinary::upload($request->file('cover_image')->getRealPath(), [
             'folder' => 'books'
         ])->getSecurePath();
@@ -130,26 +130,26 @@ public function update(Request $request, Book $book)
         return response()->json(['message' => 'Unauthorized'], 403);
     }
 
-    // Delete image from Cloudinary if it exists
+    
     if ($book->cover_image) {
         try {
-            // Extract public ID from Cloudinary URL
+            
             $parsedUrl = parse_url($book->cover_image);
             $pathParts = explode('/', $parsedUrl['path']);
             
-            // Format: .../v1/folder/public_id.extension
-            // Remove extension from the last part
+            
+            
             $lastPart = end($pathParts);
             $publicIdParts = explode('.', $lastPart);
-            array_pop($publicIdParts); // Remove extension
+            array_pop($publicIdParts); 
             
-            // Reconstruct the public ID including folder
-            $folderPath = array_slice($pathParts, -2, 1)[0]; // Get folder name
+            
+            $folderPath = array_slice($pathParts, -2, 1)[0]; 
             $publicId = $folderPath . '/' . implode('.', $publicIdParts);
             
             Cloudinary::destroy($publicId);
         } catch (\Exception $e) {
-            // Log error but continue with the deletion
+            
             \Log::error('Failed to delete Cloudinary image: ' . $e->getMessage());
         }
     }
