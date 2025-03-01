@@ -9,23 +9,16 @@ const AdminDashBoard = () => {
     totalUsers: 50,
   });
 
-  const [recentOrders, setRecentOrders] = useState([
-    { id: 1, customer: "John Doe", book: "The Alchemist", status: "Shipped" },
-    { id: 2, customer: "Jane Smith", book: "Atomic Habits", status: "Pending" },
-    { id: 3, customer: "Michael Brown", book: "Deep Work", status: "Delivered" },
-  ]);
-
   useEffect(() => {
-    // Simulate fetching updated stats from an API
     setTimeout(() => {
-      setStats({ totalBooks: 125, totalOrders: 80, totalUsers: 55 });
+      setStats({ totalBooks: 125, totalOrders: "80", totalUsers: 55 });
     }, 2000);
   }, []);
 
   return (
     <div className="admin-dashboard-container">
       {/* Sidebar */}
-      <div className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+      <div className={sidebarOpen ? "sidebar open" : "sidebar-closed"}> 
         <button className="menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
           <FiMenu />
         </button>
@@ -60,7 +53,7 @@ const AdminDashBoard = () => {
           </div>
           <div className="stat-card">
             <FiShoppingCart className="stat-icon" />
-            <h2>{stats.totalOrders}</h2>
+            <h2>{stats.totalOrders.length}</h2>
             <p>Total Orders</p>
           </div>
           <div className="stat-card">
@@ -70,7 +63,6 @@ const AdminDashBoard = () => {
           </div>
         </div>
 
-        {/* Recent Orders */}
         <div className="recent-orders">
           <h2>Recent Orders</h2>
           <table>
@@ -81,15 +73,16 @@ const AdminDashBoard = () => {
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              {recentOrders.map((order) => (
-                <tr key={order.id}>
-                  <td>{order.customer}</td>
-                  <td>{order.book}</td>
-                  <td className={`status ${order.status.toLowerCase()}`}>{order.status}</td>
-                </tr>
-              ))}
-            </tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>The Alchemist</td>
+              <td className="status shipped">Shipped</td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>Atomic Habits</td>
+              <td className="status pending">Pending</td>
+            </tr>
           </table>
         </div>
       </div>
