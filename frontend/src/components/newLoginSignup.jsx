@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import "./newLoginSignup.css";
+import Navbar from './navbar';
+import Footer from './footer';
 
 const SignInSignUp = () => {
   const [signUpMode, setSignUpMode] = useState(false);
 
   return (
+    <div>
+    <Navbar />
     <div className="login-container">
       <div className={`container ${signUpMode ? "sign-up-mode" : ""}`}>
         <div className="forms-container">
@@ -81,6 +85,8 @@ const SignInSignUp = () => {
           </div>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 };
