@@ -9,6 +9,7 @@ import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
 import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
+import NewPage from './components/newLoginSignup.jsx'; // Importing the new page
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ function App() {
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/newpage" element={<NewPage />} /> {/* New Route */}
         <Route
           path="/admin-dashboard"
           element={
@@ -60,7 +62,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route path="/publishersignup" element={<PublisherSignupPage />} />
         <Route
           path="/dashboard"
@@ -89,6 +90,5 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   return children;
 };
-
 
 export default App;
