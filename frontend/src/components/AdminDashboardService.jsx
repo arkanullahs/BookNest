@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FiBook, FiShoppingCart, FiUsers, FiSearch, FiMenu } from "react-icons/fi";
 import "./AdminDashBoard.css";
 
 const AdminDashBoard = () => {
@@ -11,14 +12,14 @@ const AdminDashBoard = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setStats({ totalBooks: 125, totalOrders: "80", totalUsers: 55 });
+      setStats({ totalBooks: 125, totalOrders: 80, totalUsers: 55 });
     }, 2000);
   }, []);
 
   return (
     <div className="admin-dashboard-container">
       {/* Sidebar */}
-      <div className={sidebarOpen ? "sidebar open" : "sidebar-closed"}> 
+      <div className={sidebarOpen ? "sidebar open" : "sidebar closed"}> 
         <button className="menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
           <FiMenu />
         </button>
@@ -32,19 +33,14 @@ const AdminDashBoard = () => {
         </ul>
       </div>
 
-      {/* Main Content */}
       <div className="admin-main">
         <h1 className="dashboard-title">Admin Dashboard</h1>
-
-        {/* Search Bar */}
         <div className="search-bar">
           <input type="text" placeholder="Search..." />
           <button>
             <FiSearch />
           </button>
         </div>
-
-        {/* Stats Section */}
         <div className="stats-container">
           <div className="stat-card">
             <FiBook className="stat-icon" />
@@ -53,7 +49,7 @@ const AdminDashBoard = () => {
           </div>
           <div className="stat-card">
             <FiShoppingCart className="stat-icon" />
-            <h2>{stats.totalOrders.length}</h2>
+            <h2>{stats.totalOrders}</h2>
             <p>Total Orders</p>
           </div>
           <div className="stat-card">
@@ -62,7 +58,6 @@ const AdminDashBoard = () => {
             <p>Total Users</p>
           </div>
         </div>
-
         <div className="recent-orders">
           <h2>Recent Orders</h2>
           <table>
@@ -73,16 +68,18 @@ const AdminDashBoard = () => {
                 <th>Status</th>
               </tr>
             </thead>
-            <tr>
-              <td>John Doe</td>
-              <td>The Alchemist</td>
-              <td className="status shipped">Shipped</td>
-            </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td>Atomic Habits</td>
-              <td className="status pending">Pending</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>John Doe</td>
+                <td>The Alchemist</td>
+                <td className="status shipped">Shipped</td>
+              </tr>
+              <tr>
+                <td>Jane Smith</td>
+                <td>Atomic Habits</td>
+                <td className="status pending">Pending</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
