@@ -3,41 +3,24 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import "./UserDashboard.css";
+import axios from 'axios';
+const API_BASE_URL = 'http://localhost:8000/api';// Assuming you've created this config file
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [activeSection, setActiveSection] = useState("profile");
-  const [data, setData] = useState({
-    address: [],
-    orders: null,
-    list: null,
-  });
-  const [newAddress, setNewAddress] = useState({
-    fullName: "",
-    addressLine1: "",
-    addressLine2: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "",
-    phone: "",
-    isDefault: false
-  });
+  const [dashboardSummary, setDashboardSummary] = useState(null);
+  const [orders, setOrders] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  // Mock data to display when backend is unavailable
-  const mockData = {
-    address: [],
-    orders: "No orders found.",
-    list: "Your list is empty.",
-  };
-
-  // Fetch user data from localStorage (token & user)
+  // Fetch user data and dashboard summary from backend APIs
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    const token = localStorage.getItem("token"); // Assuming token is stored as 'token' after login
+    const userData = localStorage.getItem("user"); // Assuming user data is stored as 'user'
 
     if (!token || !userData) {
       navigate("/login");
@@ -45,34 +28,31 @@ const UserDashboard = () => {
     }
     setUser(JSON.parse(userData));
 
-    // Set mock addresses for demonstration
-    setData(prev => ({
-      ...prev,
-
-    }));
-  }, [navigate]);
-
-  // Fetch data from backend or use mock data if unavailable
-  useEffect(() => {
-    const fetchData = async (type) => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        // Replace with your actual API endpoint
-        const response = await fetch(`http://localhost:8000/api/${type}`);
-        if (!response.ok) throw new Error(`Failed to fetch ${type}`);
-        const result = await response.json();
-        setData((prev) => ({ ...prev, [type]: result }));
-      } catch (error) {
-        console.error(error);
-        // Use mock data if API fails
-        if (type !== 'address') { // We already set mock address data above
-          setData((prev) => ({ ...prev, [type]: mockData[type] }));
-        }
+        const token = localStorage.getItem('token'); // Get token
+        const headers = { Authorization: `Bearer ${token}` }; // Prepare auth header
+
+        // Fetch User Dashboard Summary Data
+        const summaryResponse = await axios.get(`${API_BASE_URL}/user/dashboard`, { headers });
+        setDashboardSummary(summaryResponse.data);
+
+        // Fetch Orders Data
+        const ordersResponse = await axios.get(`${API_BASE_URL}/orders`, { headers });
+        setOrders(ordersResponse.data.data); // Assuming pagination returns data in .data.data
+
+      } catch (err) {
+        setError(err);
+        console.error("Error fetching dashboard data:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    // Attempt fetching data for each section
-    ["orders", "list"].forEach(fetchData);
-  }, []);
+    fetchDashboardData();
+  }, [navigate]);
 
   const handleUploadClick = () => {
     fileInputRef.current.click();
@@ -81,72 +61,12 @@ const UserDashboard = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Handle the file upload logic here
+      // Handle the file upload logic here (not implemented in backend API)
       console.log("File selected:", file.name);
       // You would typically upload this file to your server
     }
   };
 
-  const handleAddressChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewAddress(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleAddAddress = () => {
-    // Validate address fields here
-    const addressId = Date.now(); // Simple way to generate unique ID
-    const updatedAddresses = [...data.address, { ...newAddress, id: addressId }];
-
-    setData(prev => ({
-      ...prev,
-      address: updatedAddresses
-    }));
-
-    // Reset form
-    setNewAddress({
-      fullName: "",
-      addressLine1: "",
-      addressLine2: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      country: "",
-      phone: "",
-      isDefault: false
-    });
-
-    // Here you would typically make an API call to save the address
-    console.log("Address added:", newAddress);
-  };
-
-  const handleDeleteAddress = (addressId) => {
-    const updatedAddresses = data.address.filter(addr => addr.id !== addressId);
-    setData(prev => ({
-      ...prev,
-      address: updatedAddresses
-    }));
-
-    // Here you would typically make an API call to delete the address
-    console.log("Address deleted:", addressId);
-  };
-
-  const handleSetDefaultAddress = (addressId) => {
-    const updatedAddresses = data.address.map(addr => ({
-      ...addr,
-      isDefault: addr.id === addressId
-    }));
-
-    setData(prev => ({
-      ...prev,
-      address: updatedAddresses
-    }));
-
-    // Here you would typically make an API call to update the default address
-    console.log("Default address set:", addressId);
-  };
 
   const renderProfileSection = () => {
     return (
@@ -176,7 +96,8 @@ const UserDashboard = () => {
               <input
                 type="text"
                 id="firstName"
-                defaultValue={user?.name?.split(' ')[0] || "elman"}
+                defaultValue={user?.name?.split(' ')[0] || "N/A"} // Display from user data
+                readOnly // Make fields read-only as no update API provided
               />
             </div>
 
@@ -185,33 +106,12 @@ const UserDashboard = () => {
               <input
                 type="text"
                 id="lastName"
-                defaultValue={user?.name?.split(' ')[1] || ""}
+                defaultValue={user?.name?.split(' ')[1] || "N/A"} // Display from user data
+                readOnly
               />
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="dob">Your Date of Birth</label>
-              <input
-                type="text"
-                id="dob"
-                placeholder="mm/dd/yyyy"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Gender</label>
-              <div className="radio-group">
-                <label className="radio-label">
-                  <input type="radio" name="gender" value="male" /> Male
-                </label>
-                <label className="radio-label">
-                  <input type="radio" name="gender" value="female" /> Female
-                </label>
-              </div>
-            </div>
-          </div>
 
           <div className="form-row">
             <div className="form-group">
@@ -219,256 +119,90 @@ const UserDashboard = () => {
               <input
                 type="email"
                 id="email"
-                defaultValue={user?.email || "elmanaust@gmail.com"}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phone">Mobile Number</label>
-              <input
-                type="text"
-                id="phone"
+                defaultValue={user?.email || "N/A"} // Display from user data
+                readOnly
               />
             </div>
           </div>
 
-          <h3>Password</h3>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="newPassword">New Password</label>
-              <div className="password-input">
-                <input
-                  type="password"
-                  id="newPassword"
-                />
-                <span className="password-toggle">👁️</span>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <div className="password-input">
-                <input
-                  type="password"
-                  id="confirmPassword"
-                />
-                <span className="password-toggle">👁️</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button className="save-btn">Save</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderAddressSection = () => {
-    return (
-      <div className="address-section">
-        <div className="section-header">
-          <h2>My Addresses</h2>
-          <button className="add-btn" onClick={() => document.getElementById('addAddressForm').style.display = 'block'}>
-            + Add New Address
-          </button>
+          {/* Removed Password and Save button as no API for profile update/password change */}
         </div>
 
-        {data.address.length > 0 ? (
-          <div className="addresses-container">
-            {data.address.map((address) => (
-              <div key={address.id} className={`address-card ${address.isDefault ? 'default-address' : ''}`}>
-                {address.isDefault && <span className="default-badge">Default</span>}
-                <h3>{address.fullName}</h3>
-                <p>{address.addressLine1}</p>
-                {address.addressLine2 && <p>{address.addressLine2}</p>}
-                <p>{address.city}, {address.state} {address.zipCode}</p>
-                <p>{address.country}</p>
-                <p>Phone: {address.phone}</p>
-
-                <div className="address-actions">
-                  {!address.isDefault && (
-                    <button
-                      className="default-btn"
-                      onClick={() => handleSetDefaultAddress(address.id)}
-                    >
-                      Set as Default
-                    </button>
-                  )}
-                  <button
-                    className="edit-btn"
-                    onClick={() => console.log("Edit address:", address.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteAddress(address.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+        {dashboardSummary && (
+          <div className="dashboard-summary">
+            <h3>Dashboard Summary</h3>
+            <p>Order Count: {dashboardSummary.order_count}</p>
+            <p>Total Spent: ${dashboardSummary.total_spent}</p>
+            <p>Comment Count: {dashboardSummary.comment_count}</p>
+            {dashboardSummary.recommended_books && dashboardSummary.recommended_books.length > 0 && (
+              <div>
+                <h4>Recommended Books:</h4>
+                <ul>
+                  {dashboardSummary.recommended_books.map(book => (
+                    <li key={book.id}>{book.title} by {book.author}</li>
+                  ))}
+                </ul>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="no-addresses">
-            <p>You don't have any saved addresses yet.</p>
+            )}
           </div>
         )}
+      </div>
+    );
+  };
 
-        <div id="addAddressForm" className="address-form" style={{ display: 'none' }}>
-          <h3>Add New Address</h3>
+  const renderOrdersSection = () => {
+    if (loading) {
+      return <p>Loading orders...</p>;
+    }
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="fullName">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                value={newAddress.fullName}
-                onChange={handleAddressChange}
-              />
+    if (error) {
+      return <p>Error fetching orders: {error.message}</p>;
+    }
+
+    if (!orders || orders.length === 0) {
+      return <div className="generic-section"><h2>My Orders</h2><p className="empty-message">You Haven't ordered yet. Order Something!!</p></div>;
+    }
+
+    return (
+      <div className="generic-section">
+        <h2>My Orders</h2>
+        <div className="orders-container">
+          {orders.map((order) => (
+            <div key={order.id} className="order-card">
+              <h3>Order ID: {order.id}</h3>
+              <p>Created At: {new Date(order.created_at).toLocaleString()}</p>
+              <p>Total Amount: ${order.total_amount}</p>
+              <h4>Books:</h4>
+              <ul>
+                {order.books.map(book => (
+                  <li key={book.id}>{book.title} by {book.author}</li>
+                ))}
+              </ul>
             </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="addressLine1">Address Line 1</label>
-              <input
-                type="text"
-                id="addressLine1"
-                name="addressLine1"
-                value={newAddress.addressLine1}
-                onChange={handleAddressChange}
-                placeholder="Street address, P.O. box"
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="addressLine2">Address Line 2 (Optional)</label>
-              <input
-                type="text"
-                id="addressLine2"
-                name="addressLine2"
-                value={newAddress.addressLine2}
-                onChange={handleAddressChange}
-                placeholder="Apartment, suite, unit, building, floor, etc."
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="city">City</label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                value={newAddress.city}
-                onChange={handleAddressChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="state">State/Province/Region</label>
-              <input
-                type="text"
-                id="state"
-                name="state"
-                value={newAddress.state}
-                onChange={handleAddressChange}
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="zipCode">ZIP Code</label>
-              <input
-                type="text"
-                id="zipCode"
-                name="zipCode"
-                value={newAddress.zipCode}
-                onChange={handleAddressChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="country">Country</label>
-              <input
-                type="text"
-                id="country"
-                name="country"
-                value={newAddress.country}
-                onChange={handleAddressChange}
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                value={newAddress.phone}
-                onChange={handleAddressChange}
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group checkbox-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="isDefault"
-                  checked={newAddress.isDefault}
-                  onChange={handleAddressChange}
-                />
-                Make this my default address
-              </label>
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button
-              className="cancel-btn"
-              onClick={() => document.getElementById('addAddressForm').style.display = 'none'}
-            >
-              Cancel
-            </button>
-            <button
-              className="save-btn"
-              onClick={handleAddAddress}
-            >
-              Save Address
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     );
   };
+
 
   const renderSection = (sectionName, title, content) => {
     return (
       <div className="generic-section">
         <h2>{title}</h2>
-        {typeof content === 'string' ? (
-          <p className="empty-message">{content}</p>
-        ) : (
-          content
-        )}
+        <p className="empty-message">{content}</p>
       </div>
     );
   };
+
+  if (loading && activeSection !== 'profile' && activeSection !== 'orders') {
+    return <p>Loading...</p>; // Loading for sections that might need data (though now mostly removed)
+  }
+
+  if (error && activeSection !== 'profile' && activeSection !== 'orders') {
+    return <p>Error: {error.message}</p>; // Error handling for sections that might fail
+  }
+
 
   return (
     <div className="dashboard-container">
@@ -484,7 +218,7 @@ const UserDashboard = () => {
               </div>
               <div className="user-info">
                 <span>Hello</span>
-                <h3>{user?.name || "elman"}</h3>
+                <h3>{user?.name || "N/A"}</h3>
               </div>
             </div>
 
@@ -495,47 +229,12 @@ const UserDashboard = () => {
               >
                 My Profile
               </li>
-              <li
-                className={activeSection === "address" ? "active" : ""}
-                onClick={() => setActiveSection("address")}
-              >
-                My Address
-              </li>
+              {/* Removed Address, eBook, List, Wishlist, Reviews, Authors from sidebar as per API availability */}
               <li
                 className={activeSection === "orders" ? "active" : ""}
                 onClick={() => setActiveSection("orders")}
               >
                 My Orders
-              </li>
-              <li
-                className={activeSection === "ebook" ? "active" : ""}
-                onClick={() => setActiveSection("ebook")}
-              >
-                My eBook Library
-              </li>
-              <li
-                className={activeSection === "list" ? "active" : ""}
-                onClick={() => setActiveSection("list")}
-              >
-                My List
-              </li>
-              <li
-                className={activeSection === "wishlist" ? "active" : ""}
-                onClick={() => setActiveSection("wishlist")}
-              >
-                My Wishlist
-              </li>
-              <li
-                className={activeSection === "reviews" ? "active" : ""}
-                onClick={() => setActiveSection("reviews")}
-              >
-                My Rating & Reviews
-              </li>
-              <li
-                className={activeSection === "authors" ? "active" : ""}
-                onClick={() => setActiveSection("authors")}
-              >
-                My Following Authors
               </li>
             </ul>
           </aside>
@@ -543,13 +242,13 @@ const UserDashboard = () => {
           {/* Main Content */}
           <section className="main-content">
             {activeSection === "profile" && renderProfileSection()}
-            {activeSection === "address" && renderAddressSection()}
-            {activeSection === "orders" && renderSection("orders", "My Orders", "You Haven't ordered yet.Order Something!!")}
-            {activeSection === "ebook" && renderSection("ebook", "My eBook Library", "Your eBook library is empty..Add some!!")}
-            {activeSection === "list" && renderSection("list", "My List", "Your List  is empty..................Add some!!")}
-            {activeSection === "wishlist" && renderSection("wishlist", "My Wishlist", "Wishlist is Empty.Add something to it.")}
-            {activeSection === "reviews" && renderSection("reviews", "My Ratings & Reviews", "You haven't submitted any reviews yet.")}
-            {activeSection === "authors" && renderSection("authors", "My Following Authors", "You are not following any authors yet.")}
+            {activeSection === "orders" && renderOrdersSection()}
+            {activeSection === "ebook" && renderSection("ebook", "My eBook Library", "Your eBook library feature is not available in current version.")} {/* Placeholder messages for removed sections */}
+            {activeSection === "list" && renderSection("list", "My List", "Your List feature is not available in current version.")}
+            {activeSection === "wishlist" && renderSection("wishlist", "My Wishlist", "Your Wishlist feature is not available in current version.")}
+            {activeSection === "reviews" && renderSection("reviews", "My Ratings & Reviews", "Your Ratings & Reviews feature is not available in current version.")}
+            {activeSection === "authors" && renderSection("authors", "My Following Authors", "Your Following Authors feature is not available in current version.")}
+            {activeSection === "address" && renderSection("address", "My Address", "Your Address feature is not available in current version.")}
           </section>
         </div>
       </div>
