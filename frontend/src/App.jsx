@@ -9,7 +9,7 @@ import PublisherSignupPage from './components/publishersignup.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
 import PublisherDashboard from './components/PublisherDashboard.jsx';
 import UserDashboard from './components/UserDashboard.jsx';
-import NewPage from './components/newLoginSignup.jsx'; // Importing the new page
+import NewLogin from './components/newLoginSignup.jsx'; // Importing the new page
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ function App() {
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="/newpage" element={<NewPage />} /> {/* New Route */}
+        <Route path="/newlogin" element={<NewLogin />} /> 
         <Route
           path="/admin-dashboard"
           element={

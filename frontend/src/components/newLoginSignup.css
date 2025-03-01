@@ -139,7 +139,7 @@
 
 .login-container .btn {
   width: 150px;
-  background-color: #5995fd;
+  background-color: #102653;
   border: none;
   outline: none;
   height: 49px;
@@ -181,7 +181,7 @@
 }
 
 .login-container .image {
-  width: 100%;
+  width: 75%;
   transition: transform 1.1s ease-in-out;
   transition-delay: 0.4s;
 }
