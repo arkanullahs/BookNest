@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Container, 
-  Grid, 
-  Card, 
-  CardMedia, 
-  CardContent, 
-  Typography, 
-  IconButton, 
-  Tab, 
-  Tabs, 
-  Box, 
-  Rating, 
-  Button, 
-  ToggleButtonGroup, 
+import {
+  Container,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  IconButton,
+  Tab,
+  Tabs,
+  Box,
+  Rating,
+  Button,
+  ToggleButtonGroup,
   ToggleButton
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,9 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import SortIcon from '@mui/icons-material/Sort';
 import Navbar from './navbar';
 import Footer from './footer';
+import axios from 'axios'; // Import axios for API calls
+
+const API_BASE_URL = 'http://localhost:8000/api'; // **IMPORTANT**: Replace with your actual backend API URL
 
 const Books = () => {
   const navigate = useNavigate();
@@ -30,104 +33,26 @@ const Books = () => {
   const [view, setView] = useState('grid');
   const [favorites, setFavorites] = useState({});
   const [books, setBooks] = useState([]);
-
-  // Mock data in case API fails
-  const mockBooks = [
-    {
-      id: 1,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738857/image_3_jgpfi8.png",
-      title: "Like A Summer",
-      author: "John Stroud",
-      price: 19.99,
-      originalPrice: 24.99,
-      rating: 4,
-      category: ["ADVENTURE", "SCIENCE", "COMEDY"]
-    },
-    {
-      id: 2,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738729/image_rooxq2.png",
-      title:"Think Like A Monk" ,
-      author: "Kevin Smiley",
-      price: 15.63,
-      originalPrice: 16.99,
-      rating: 4,
-      category: ["BIOGRAPHY"]
-    },
-    {
-      id: 3,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738859/image_1_aln1qm.png",
-      title: "Shatter Me",
-      author: "Tahereh Mafi",
-      price: 54.78,
-      originalPrice: 70.00,
-      rating: 4.7,
-      category: ["THRILLER", "DRAMA", "HORROR"]
-    },
-    {
-      id: 4,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738858/image_2_yilukz.png",
-      title: "12 Rules Of Love",
-      author: "Jay Shetty",
-      price: 24.50,
-      originalPrice: 29.99,
-      rating: 3,
-      category: ["ADVENTURE"]
-    },
-    {
-      id: 5,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738857/image_3_jgpfi8.png",
-      title: "A Heavy Lift",
-      author: "David Miller",
-      price: 22.75,
-      originalPrice: 27.99,
-      rating: 4,
-      category: ["HORROR", "DRAMA"]
-    },
-    {
-      id: 6,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738729/image_rooxq2.png",
-      title: "Battle Drive",
-      author: "Mike Johnson",
-      price: 45.40,
-      originalPrice: 59.99,
-      rating: 3,
-      category: ["RACING", "DRAMA"]
-    },
-    {
-      id: 7,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738859/image_1_aln1qm.png",
-      title: "Take Out Tango",
-      author: "Sarah Wilson",
-      price: 18.25,
-      originalPrice: 21.99,
-      rating: 3,
-      category: ["SPORTS", "DRAMA"]
-    },
-    {
-      id: 8,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738858/image_2_yilukz.png",
-      title: "Pushing Clouds",
-      author: "Lisa Jackson",
-      price: 14.99,
-      originalPrice: 19.99,
-      rating: 2,
-      category: ["DRAMA", "COMEDY"]
-    }
-  ];
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null);     // Add error state
 
   // Fetch books from API
   useEffect(() => {
-    // API call would go here
-    // fetch('/api/books')
-    //   .then(response => response.json())
-    //   .then(data => setBooks(data))
-    //   .catch(error => {
-    //     console.error('Error fetching books:', error);
-    //     setBooks(mockBooks);
-    //   });
+    const fetchBooks = async () => {
+      setLoading(true); // Start loading
+      setError(null);     // Clear any previous errors
+      try {
+        const response = await axios.get(`${API_BASE_URL}/books`); // Make API call
+        setBooks(response.data.data); // **Corrected:** setBooks(response.data.data) -> setBooks(response.data.data)
+      } catch (err) {
+        setError(err); // Set error state if API call fails
+        console.error('Error fetching books:', err);
+      } finally {
+        setLoading(false); // End loading, whether success or failure
+      }
+    };
 
-    // Using mock data for now
-    setBooks(mockBooks);
+    fetchBooks();
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -159,6 +84,15 @@ const Books = () => {
   };
 
   const filteredBooks = getFilteredBooks();
+
+  if (loading) {
+    return <p>Loading books...</p>; // Display loading message while fetching
+  }
+
+  if (error) {
+    return <p>Error loading books: {error.message}</p>; // Display error message if fetch fails
+  }
+
 
   return (
     <>
@@ -201,12 +135,13 @@ const Books = () => {
         </Box>
 
         <Grid container spacing={3}>
-          {filteredBooks.map((book) => (
+          {/* Conditionally render the book list only when filteredBooks is an array and NOT loading */}
+          {!loading && Array.isArray(filteredBooks) && filteredBooks.map((book) => (
             <Grid item xs={12} sm={6} md={3} key={book.id}>
-              <Card 
-                sx={{ 
-                  height: '100%', 
-                  display: 'flex', 
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
                   flexDirection: 'column',
                   position: 'relative',
                   cursor: 'pointer',
@@ -218,10 +153,10 @@ const Books = () => {
               >
                 <CardMedia
                   component="img"
-                  image={book.img}
+                  image={book.cover_image} // Use book.cover_image here
                   alt={book.title}
-                  sx={{ 
-                    height: 250, 
+                  sx={{
+                    height: 250,
                     objectFit: 'cover',
                     borderRadius: '8px 8px 0 0'
                   }}
@@ -242,8 +177,8 @@ const Books = () => {
                     handleFavoriteToggle(book.id);
                   }}
                 >
-                  {favorites[book.id] ? 
-                    <FavoriteIcon color="primary" /> : 
+                  {favorites[book.id] ?
+                    <FavoriteIcon color="primary" /> :
                     <FavoriteBorderIcon />
                   }
                 </IconButton>
@@ -252,27 +187,28 @@ const Books = () => {
                     {book.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" align="center" gutterBottom>
-                    {book.category.join(', ')}
+                    {book.author} {/* Display author, not category for now as per backend response */}
                   </Typography>
                   <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
-                    <Rating name={`rating-${book.id}`} value={book.rating} readOnly precision={0.5} size="small" />
+                    <Rating name={`rating-${book.id}`} value={book.average_rating} readOnly precision={0.5} size="small" /> {/* Use average_rating from backend response */}
                   </Box>
-                  { 
+                  {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <Typography variant="h6" color="primary" fontWeight="bold">
-                        $ {book.price.toFixed(2)}
+                        $ {parseFloat(book.price).toFixed(2)} {/* **Corrected**: parseFloat(book.price).toFixed(2) */}
                         <Typography variant="body2" component="span" sx={{ textDecoration: 'line-through', ml: 1 }}>
-                          ${book.originalPrice.toFixed(2)}
+                          ${(parseFloat(book.price) * 1.2).toFixed(2)} {/* **Corrected**: parseFloat(book.price).toFixed(2) */}
                         </Typography>
                       </Typography>
-                      <Button 
-                        variant="contained" 
-                        color="primary" 
-                        fullWidth 
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
                         sx={{ mt: 1 }}
                         onClick={(e) => {
                           e.stopPropagation();
                           // Add to cart logic here
+                          alert('Add to cart functionality to be implemented');
                         }}
                       >
                         Add to cart
@@ -283,6 +219,12 @@ const Books = () => {
               </Card>
             </Grid>
           ))}
+          {/* Display message if no books are found after loading */}
+          {!loading && (!Array.isArray(filteredBooks) || filteredBooks.length === 0) && (
+            <Grid item xs={12}>
+              <Typography variant="body1">No books found.</Typography>
+            </Grid>
+          )}
         </Grid>
       </Container>
       <Footer />

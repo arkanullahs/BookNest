@@ -1,453 +1,222 @@
-import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Grid,
-  Typography,
-  Divider,
-  Box,
-  FormControlLabel,
-  Checkbox,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormLabel,
-  Stepper,
-  Step,
-  StepLabel,
-  Paper,
-  IconButton
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PaymentIcon from '@mui/icons-material/Payment';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import './CheckoutForm.css'; // You'll need to create this CSS file
 
-const CheckoutForm = ({ open, onClose, book, quantity }) => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    paymentMethod: 'creditCard',
-    cardNumber: '',
-    cardName: '',
-    expiryDate: '',
-    cvv: '',
-    termsAgreed: false
-  });
+const CheckoutForm = ({ book, quantity, onClose }) => {
+  // State variables
+  const [paymentMethod, setPaymentMethod] = useState('creditCard');
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const steps = ['Customer Information', 'Shipping Details', 'Payment'];
+  // Calculate order amounts
+  const subtotal = (book?.price || 0) * quantity;
+  const shipping = book?.freeShipping ? 0 : 4.99;
+  const tax = subtotal * 0.08;
+  const total = subtotal + shipping + tax;
 
-  const handleInputChange = (e) => {
-    const { name, value, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: name === 'termsAgreed' ? checked : value
-    });
-  };
-
-  const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-  };
-
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Process order - would send data to backend
-    console.log('Order submitted:', { formData, book, quantity });
-    // Close dialog and maybe show confirmation
-    onClose();
-  };
 
-  // Check if required fields for current step are filled
-  const isStepComplete = () => {
-    if (activeStep === 0) {
-      return formData.firstName && formData.lastName && formData.email && formData.phone;
-    } else if (activeStep === 1) {
-      return formData.address && formData.city && formData.state && formData.zipCode;
-    } else if (activeStep === 2) {
-      if (formData.paymentMethod === 'creditCard') {
-        return formData.cardNumber && formData.cardName && formData.expiryDate && formData.cvv && formData.termsAgreed;
-      }
-      return formData.termsAgreed;
+    if (!termsAgreed) {
+      setError("Please agree to the Terms and Conditions");
+      return;
     }
-    return false;
-  };
 
-  const totalPrice = book ? (book.price * quantity).toFixed(2) : 0;
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Get the token directly from localStorage
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
+
+      const response = await fetch('http://localhost:8000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              book_id: book.id,
+              quantity: quantity
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to place order');
+      }
+
+      const data = await response.json();
+      console.log('Order successful:', data);
+      setSuccess(true);
+
+      // Close modal after delay
+      setTimeout(() => {
+        onClose();
+        // You might want to redirect to order confirmation page here
+        // window.location.href = `/orders/${data.id}`;
+      }, 2000);
+
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-      aria-labelledby="checkout-dialog-title"
-    >
-      <DialogTitle id="checkout-dialog-title" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h5">Checkout</Typography>
-        <IconButton edge="end" color="inherit" onClick={onClose} aria-label="close">
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      
-      <Divider />
-      
-      <DialogContent>
-        <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <form onSubmit={handleSubmit}>
-              {activeStep === 0 && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="h6" gutterBottom>Customer Information</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="First Name"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="Last Name"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="Email Address"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="Phone Number"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                </Grid>
-              )}
+    <div className="checkout-modal">
+      <div className="checkout-header">
+        <h2>Checkout</h2>
+        <button className="close-button" onClick={onClose}>×</button>
+      </div>
 
-              {activeStep === 1 && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="h6" gutterBottom>Shipping Details</Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="Address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="City"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="State/Province"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="ZIP / Postal code"
-                      name="zipCode"
-                      value={formData.zipCode}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                </Grid>
-              )}
+      {error && (
+        <div className="error-message">
+          {error}
+          {error.includes('Authentication') && (
+            <button onClick={() => window.location.href = "/login"} className="login-button">
+              Log In
+            </button>
+          )}
+        </div>
+      )}
 
-              {activeStep === 2 && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="h6" gutterBottom>Payment Method</Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl component="fieldset">
-                      <RadioGroup
-                        name="paymentMethod"
-                        value={formData.paymentMethod}
-                        onChange={handleInputChange}
-                      >
-                        <Paper variant="outlined" sx={{ mb: 2, p: 2 }}>
-                          <FormControlLabel 
-                            value="creditCard" 
-                            control={<Radio />} 
-                            label={
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <CreditCardIcon sx={{ mr: 1 }} />
-                                <Typography>Credit Card</Typography>
-                              </Box>
-                            } 
-                          />
-                        </Paper>
-                        
-                        <Paper variant="outlined" sx={{ mb: 2, p: 2 }}>
-                          <FormControlLabel 
-                            value="bankTransfer" 
-                            control={<Radio />} 
-                            label={
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <AccountBalanceIcon sx={{ mr: 1 }} />
-                                <Typography>Bank Transfer</Typography>
-                              </Box>
-                            } 
-                          />
-                        </Paper>
-                        
-                        <Paper variant="outlined" sx={{ mb: 2, p: 2 }}>
-                          <FormControlLabel 
-                            value="COD" 
-                            control={<Radio />} 
-                            label={
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <PaymentIcon sx={{ mr: 1 }} />
-                                <Typography>Cash On Delevary</Typography>
-                              </Box>
-                            } 
-                          />
-                        </Paper>
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  
-                  {formData.paymentMethod === 'creditCard' && (
-                    <>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          fullWidth
-                          label="Card Number"
-                          name="cardNumber"
-                          value={formData.cardNumber}
-                          onChange={handleInputChange}
-                          placeholder="XXXX XXXX XXXX XXXX"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          fullWidth
-                          label="Name on Card"
-                          name="cardName"
-                          value={formData.cardName}
-                          onChange={handleInputChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          fullWidth
-                          label="Expiry Date"
-                          name="expiryDate"
-                          value={formData.expiryDate}
-                          onChange={handleInputChange}
-                          placeholder="MM/YY"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          fullWidth
-                          label="CVV"
-                          name="cvv"
-                          value={formData.cvv}
-                          onChange={handleInputChange}
-                          placeholder="XXX"
-                        />
-                      </Grid>
-                    </>
-                  )}
-                  
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          name="termsAgreed"
-                          checked={formData.termsAgreed}
-                          onChange={handleInputChange}
-                          color="primary"
-                          required
-                        />
-                      }
-                      label={
-                        <Typography variant="body2">
-                          I agree to the{' '}
-                          <Link href="#" color="primary">
-                            Terms and Conditions
-                          </Link>{' '}
-                          and{' '}
-                          <Link href="#" color="primary">
-                            Privacy Policy
-                          </Link>
-                        </Typography>
-                      }
-                    />
-                  </Grid>
-                </Grid>
-              )}
-            </form>
-          </Grid>
-          
-          <Grid item xs={12} md={4}>
-            <Paper variant="outlined" sx={{ p: 2 }}>
-              <Typography variant="h6" gutterBottom>Order Summary</Typography>
-              
-              {book && (
-                <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Box
-                    component="img"
-                    src={book.img}
-                    alt={book.title}
-                    sx={{ width: 70, height: 100, objectFit: 'cover', borderRadius: 1, mr: 2 }}
-                  />
-                  <Box>
-                    <Typography variant="subtitle1" gutterBottom>
-                      {book.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      by {book.author}
-                    </Typography>
-                    <Typography variant="body2" sx={{ mt: 1 }}>
-                      Quantity: {quantity}
-                    </Typography>
-                  </Box>
-                </Box>
-              )}
-              
-              <Divider sx={{ my: 2 }} />
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body1">Subtotal:</Typography>
-                <Typography variant="body1">${totalPrice}</Typography>
-              </Box>
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body1">Shipping:</Typography>
-                <Typography variant="body1">
-                  {book && book.freeShipping ? 'Free' : '$4.99'}
-                </Typography>
-              </Box>
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body1">Tax:</Typography>
-                <Typography variant="body1">${(totalPrice * 0.08).toFixed(2)}</Typography>
-              </Box>
-              
-              <Divider sx={{ my: 2 }} />
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="h6">Total:</Typography>
-                <Typography variant="h6" color="primary">
-                  ${book && book.freeShipping 
-                    ? (parseFloat(totalPrice) + parseFloat(totalPrice) * 0.08).toFixed(2)
-                    : (parseFloat(totalPrice) + 4.99 + parseFloat(totalPrice) * 0.08).toFixed(2)
-                  }
-                </Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        </Grid>
-      </DialogContent>
-      
-      <Divider />
-      
-      <DialogActions sx={{ p: 2, justifyContent: 'space-between' }}>
-        <Button 
+      {success && (
+        <div className="success-message">
+          Order placed successfully!
+        </div>
+      )}
+
+      <div className="checkout-content">
+        <div className="payment-section">
+          <h3>Payment Method</h3>
+
+          <div className="payment-options">
+            <label className={`payment-option ${paymentMethod === 'creditCard' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="creditCard"
+                checked={paymentMethod === 'creditCard'}
+                onChange={() => setPaymentMethod('creditCard')}
+              />
+              <span className="radio-custom"></span>
+              <span className="option-icon credit-card-icon">💳</span>
+              <span className="option-label">Credit Card</span>
+            </label>
+
+            <label className={`payment-option ${paymentMethod === 'bankTransfer' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="bankTransfer"
+                checked={paymentMethod === 'bankTransfer'}
+                onChange={() => setPaymentMethod('bankTransfer')}
+              />
+              <span className="radio-custom"></span>
+              <span className="option-icon bank-icon">🏦</span>
+              <span className="option-label">Bank Transfer</span>
+            </label>
+
+            <label className={`payment-option ${paymentMethod === 'COD' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="COD"
+                checked={paymentMethod === 'COD'}
+                onChange={() => setPaymentMethod('COD')}
+              />
+              <span className="radio-custom"></span>
+              <span className="option-icon cash-icon">💰</span>
+              <span className="option-label">Cash On Delivery</span>
+            </label>
+          </div>
+
+          <div className="terms-container">
+            <label className="terms-label">
+              <input
+                type="checkbox"
+                checked={termsAgreed}
+                onChange={(e) => setTermsAgreed(e.target.checked)}
+              />
+              <span className="checkbox-custom"></span>
+              <span>
+                I agree to the <a href="/terms">Terms and Conditions</a> and{' '}
+                <a href="/privacy">Privacy Policy</a>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div className="order-summary">
+          <h3>Order Summary</h3>
+
+          {book && (
+            <div className="book-info">
+              <img
+                src={book.cover_image}
+                alt={book.title}
+                className="book-cover"
+              />
+              <div className="book-details">
+                <h4>{book.title}</h4>
+                <p>by {book.author}</p>
+                <p>Quantity: {quantity}</p>
+              </div>
+            </div>
+          )}
+
+          <div className="price-breakdown">
+            <div className="price-row">
+              <span>Subtotal:</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="price-row">
+              <span>Shipping:</span>
+              <span>{book?.freeShipping ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+            </div>
+            <div className="price-row">
+              <span>Tax:</span>
+              <span>${tax.toFixed(2)}</span>
+            </div>
+            <div className="price-row total">
+              <span>Total:</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="checkout-actions">
+        <button
+          className="cancel-button"
           onClick={onClose}
-          variant="outlined"
+          disabled={isLoading}
         >
           Cancel
-        </Button>
-        
-        <Box>
-          {activeStep > 0 && (
-            <Button onClick={handleBack} sx={{ mr: 1 }}>
-              Back
-            </Button>
-          )}
-          
-          {activeStep < steps.length - 1 ? (
-            <Button 
-              onClick={handleNext}
-              variant="contained"
-              disabled={!isStepComplete()}
-            >
-              Next
-            </Button>
-          ) : (
-            <Button 
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={!isStepComplete()}
-              onClick={handleSubmit}
-            >
-              Place Order
-            </Button>
-          )}
-        </Box>
-      </DialogActions>
-    </Dialog>
+        </button>
+        <button
+          className="place-order-button"
+          onClick={handleSubmit}
+          disabled={isLoading || !termsAgreed || success}
+        >
+          {isLoading ? 'Processing...' : 'Place Order'}
+        </button>
+      </div>
+    </div>
   );
 };
 
