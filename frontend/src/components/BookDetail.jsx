@@ -2,21 +2,21 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import React, { useState, useEffect } from 'react';
-import { 
-  Container, 
-  Grid, 
-  Typography, 
-  Rating, 
-  Box, 
-  Button, 
-  IconButton, 
-  Divider, 
-  LinearProgress, 
-  Card, 
-  CardMedia, 
-  CardContent, 
-  Breadcrumbs, 
-  Link, 
+import {
+  Container,
+  Grid,
+  Typography,
+  Rating,
+  Box,
+  Button,
+  IconButton,
+  Divider,
+  LinearProgress,
+  Card,
+  CardMedia,
+  CardContent,
+  Breadcrumbs,
+  Link,
   Badge,
   Chip
 } from '@mui/material';
@@ -32,6 +32,9 @@ import AddIcon from '@mui/icons-material/Add';
 import Navbar from './navbar';
 import Footer from './footer';
 import CheckoutForm from './CheckoutForm';
+import axios from 'axios'; // Import axios
+
+const API_BASE_URL = 'http://localhost:8000/api'; // **IMPORTANT**: Replace with your actual backend API URL
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -39,85 +42,39 @@ const BookDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [favorite, setFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-  // Add this new state for the checkout dialog
-  const [checkoutOpen, setCheckoutOpen] = useState(false)
-  // Mock data for related books
-  const relatedBooks = [
-    {
-      id: 3,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738859/image_1_aln1qm.png",
-      title: "Shatter Me",
-      author: "Tahere Mafi",
-      price: 45.40,
-      originalPrice: 59.90,
-      rating: 4.7,
-      reviewCount: 264,
-      category: ["THRILLER", "DRAMA", "HORROR"]
-    },
-    {
-      id: 6,
-      img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738729/image_rooxq2.png",
-      title: "Battle Drive",
-      author: "Mike Johnson",
-      price: 45.40,
-      originalPrice: 59.90,
-      rating: 4.7,
-      reviewCount: 264,
-      category: ["THRILLER", "DRAMA", "HORROR"]
-    },
-  ];
-
-  // Mock review data
-  const reviewStats = {
-    average: 4.7,
-    total: 5,
-    distribution: [
-      { stars: 5, percentage: 80, count: '80%' },
-      { stars: 4, percentage: 61, count: '61%' },
-      { stars: 3, percentage: 12, count: '12%' },
-      { stars: 2, percentage: 9, count: '9%' },
-      { stars: 1, percentage: 8, count: '8%' },
-    ]
-  };
-
-  // Mock data for a specific book
-  const mockBookData = {
-    id: 2,
-    img: "https://res.cloudinary.com/dgqe5xli6/image/upload/v1737738729/image_rooxq2.png",
-    title: "Think Like A Monk",
-    author: "Kevin Smiley",
-    price: 15.63,
-    originalPrice: 16.99,
-    rating: 4.0,
-    reviewCount: 235,
-    likes: 456,
-    publisher: "Printarea Studios",
-    year: 2019,
-    description: "Think Like a Monk by Jay Shetty is a self-help book that blends ancient wisdom with modern practicality. Shetty, a former monk turned motivational speaker, shares lessons he learned during his time in a monastery and how they can be applied to everyday life for greater peace, purpose, and fulfillment.",
-    longDescription: "The book is divided into three sections—Let Go, Grow, and Give—guiding readers through overcoming negativity, cultivating self-discipline, and living with intention. Shetty provides actionable exercises, mindfulness techniques, and inspiring stories to help readers shift their mindset, reduce stress, and build meaningful relationships.At its core, Think Like a Monk teaches how to adopt a monk’s mindset in a modern world, encouraging gratitude, self-awareness, and a focus on service to others.",
-    discount: "2%",
-    inStock: true,
-    freeShipping: true,
-    category: ["BIOGRAPHY"]
-  };
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null);     // Add error state
 
   // Fetch book details from API
   useEffect(() => {
-    // API call would go here
-    // fetch(`/api/books/${id}`)
-    //   .then(response => response.json())
-    //   .then(data => setBook(data))
-    //   .catch(error => {
-    //     console.error('Error fetching book details:', error);
-    //     setBook(mockBookData);
-    //   });
+    const fetchBookDetail = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/books/${id}`); // Use dynamic book ID from useParams
+        setBook(response.data.book); // Assuming your API response wraps book data in 'book' property
+      } catch (error) {
+        setError(error);
+        console.error('Error fetching book details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Using mock data for now
-    setBook(mockBookData);
-  }, [id]);
+    fetchBookDetail();
+  }, [id]); // Re-fetch book detail when id in params changes
+
+  if (loading) {
+    return <LinearProgress />; // Show loading indicator while fetching
+  }
+
+  if (error) {
+    return <Typography color="error">Error loading book details: {error.message}</Typography>; // Show error message
+  }
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <div>Book not found</div>; // Handle case where book is not found (e.g., invalid id)
   }
 
   const handleQuantityChange = (amount) => {
@@ -134,6 +91,7 @@ const BookDetail = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+
   const handleCheckoutOpen = () => {
     setCheckoutOpen(true);
   };
@@ -141,6 +99,7 @@ const BookDetail = () => {
   const handleCheckoutClose = () => {
     setCheckoutOpen(false);
   };
+
   return (
     <>
       <Navbar />
@@ -162,7 +121,7 @@ const BookDetail = () => {
           <Grid item xs={12} md={4}>
             <Box
               component="img"
-              src={book.img}
+              src={book.cover_image} // Use book.cover_image from API response
               alt={book.title}
               sx={{
                 width: '100%',
@@ -180,28 +139,32 @@ const BookDetail = () => {
             </Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Rating value={book.rating} readOnly precision={0.1} />
-              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                {book.rating.toFixed(1)}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>
-                {book.reviewCount} Reviews
-              </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
-                <ThumbUpIcon fontSize="small" color="primary" sx={{ mr: 0.5 }} />
-                <Typography variant="body2" color="text.secondary">
-                  {book.likes} Like
-                </Typography>
-              </Box>
+              {/*  Rating component - adjust value if rating is provided in API response */}
+              {/*  If your backend API provides average_rating, use book.average_rating */}
+              {/* <Rating value={book.average_rating || 0} readOnly precision={0.1} />
+                            <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                                {book.average_rating ? book.average_rating.toFixed(1) : 'No ratings'}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>
+                                {book.comments_count || 0} Reviews {/* Assuming comment counts are available */}
+              {/* </Typography> */}
+              {/* Likes are not assumed to be in API response for single book, remove if not needed */}
+              {/* <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
+                                <ThumbUpIcon fontSize="small" color="primary" sx={{ mr: 0.5 }} />
+                                <Typography variant="body2" color="text.secondary">
+                                    {book.likes || 0} Like {/* Assuming likes are provided */}
+              {/* </Typography>
+                            {/* </Box> */}
             </Box>
 
             <Typography variant="body1" paragraph>
               {book.description}
             </Typography>
 
-            <Typography variant="body1" paragraph>
-              {book.longDescription}
-            </Typography>
+            {/* Long description is not assumed to be in API response, remove if not available */}
+            {/* <Typography variant="body1" paragraph>
+                            {book.longDescription}
+                        </Typography> */}
 
             <Grid container spacing={2} sx={{ mb: 3 }}>
               <Grid item xs={12} sm={4}>
@@ -210,6 +173,7 @@ const BookDetail = () => {
                     Written by:
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {/* Assuming author image is not directly provided, placeholder used */}
                     <Box
                       component="img"
                       src="https://via.placeholder.com/30"
@@ -228,17 +192,17 @@ const BookDetail = () => {
                     Publisher:
                   </Typography>
                   <Typography variant="body2" fontWeight="medium">
-                    {book.publisher}
+                    {book.publisher?.name} {/* Assuming publisher is nested in API response */}
                   </Typography>
                 </Box>
               </Grid>
               <Grid item xs={12} sm={4}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
-                    Year:
+                    Published Year:
                   </Typography>
                   <Typography variant="body2" fontWeight="medium">
-                    {book.year}
+                    {book.published_year}
                   </Typography>
                 </Box>
               </Grid>
@@ -249,34 +213,36 @@ const BookDetail = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
               <Box>
                 <Typography variant="h5" component="span" fontWeight="bold" color="primary">
-                  ${book.price.toFixed(2)}
+                  $ {parseFloat(book.price).toFixed(2)}
                 </Typography>
-                <Typography variant="body1" component="span" sx={{ textDecoration: 'line-through', ml: 2 }}>
-                  ${book.originalPrice.toFixed(2)}
-                </Typography>
-                <Chip label={book.discount} size="small" color="error" sx={{ ml: 1 }} />
+                {/* Original price and discount are not assumed to be in API response, remove if not needed */}
+                {/* <Typography variant="body1" component="span" sx={{ textDecoration: 'line-through', ml: 2 }}>
+                                    ${book.originalPrice.toFixed(2)}
+                                </Typography>
+                                <Chip label={book.discount} size="small" color="error" sx={{ ml: 1 }} /> */}
               </Box>
 
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {book.freeShipping && (
-                  <Chip 
-                    icon={<LocalShippingIcon />} 
-                    label="FREE SHIPPING" 
-                    color="primary" 
-                    variant="outlined" 
-                    size="small"
-                    sx={{ mr: 1 }}
-                  />
-                )}
-                {book.inStock && (
-                  <Chip 
-                    icon={<CheckCircleIcon />} 
-                    label="IN STOCK" 
-                    color="success" 
-                    variant="outlined" 
-                    size="small" 
-                  />
-                )}
+                {/* Free shipping and in stock are not assumed in API response, remove if not needed */}
+                {/* {book.freeShipping && (
+                                    <Chip
+                                        icon={<LocalShippingIcon />}
+                                        label="FREE SHIPPING"
+                                        color="primary"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1 }}
+                                    />
+                                )}
+                                {book.inStock && (
+                                    <Chip
+                                        icon={<CheckCircleIcon />}
+                                        label="IN STOCK"
+                                        color="success"
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                )} */}
               </Box>
             </Box>
 
@@ -294,21 +260,18 @@ const BookDetail = () => {
               <Button variant="contained" color="primary" sx={{ mr: 2, px: 4 }}>
                 Add to cart
               </Button>
-              <Button 
-    variant="contained" 
-    sx={{ 
-      backgroundColor: "#0A1929",  // Dark blue
-      mr: 2, 
-      px: 4,
-      '&:hover': { backgroundColor: '#061120' } // Slightly darker shade on hover
-    }}
-    onClick={handleCheckoutOpen}
-  >
-    Buy Now
-  </Button>
-
-
-
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#0A1929",  // Dark blue
+                  mr: 2,
+                  px: 4,
+                  '&:hover': { backgroundColor: '#061120' } // Slightly darker shade on hover
+                }}
+                onClick={handleCheckoutOpen}
+              >
+                Buy Now
+              </Button>
 
               <IconButton onClick={handleFavoriteToggle}>
                 {favorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
@@ -333,7 +296,7 @@ const BookDetail = () => {
           </Grid>
         </Grid>
 
-        {/* Tabs section */}
+        {/* Tabs section - Details and Reviews, Reviews tab content is removed for now */}
         <Box sx={{ mt: 6, mb: 4 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Box sx={{ display: 'flex' }}>
@@ -354,171 +317,66 @@ const BookDetail = () => {
               >
                 Details Product
               </Typography>
-              <Typography
-                variant="h6"
-                component="button"
-                onClick={() => handleTabChange('reviews')}
-                sx={{
-                  py: 2,
-                  px: 4,
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer',
-                  fontWeight: activeTab === 'reviews' ? 'bold' : 'regular',
-                  borderBottom: activeTab === 'reviews' ? 2 : 0,
-                  borderColor: activeTab === 'reviews' ? 'primary.main' : 'transparent'
-                }}
-              >
-                Customer Reviews
-              </Typography>
+              {/* Reviews tab is kept, but content is removed for now */}
+              {/* <Typography
+                                variant="h6"
+                                component="button"
+                                onClick={() => handleTabChange('reviews')}
+                                sx={{
+                                    py: 2,
+                                    px: 4,
+                                    border: 'none',
+                                    background: 'none',
+                                    cursor: 'pointer',
+                                    fontWeight: activeTab === 'reviews' ? 'bold' : 'regular',
+                                    borderBottom: activeTab === 'reviews' ? 2 : 0,
+                                    borderColor: activeTab === 'reviews' ? 'primary.main' : 'transparent'
+                                }}
+                            >
+                                Customer Reviews
+                            </Typography> */}
             </Box>
           </Box>
 
           {activeTab === 'details' && (
             <Box sx={{ py: 3 }}>
-              <Typography variant="h6" gutterBottom>Rating Information</Typography>
+              <Typography variant="h6" gutterBottom>Book Information</Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+                {book.description} {/* Display book description again in details tab */}
               </Typography>
             </Box>
           )}
 
-          {activeTab === 'reviews' && (
-            <Box sx={{ py: 3 }}>
-              <Grid container spacing={4}>
-                <Grid item xs={12} md={6}>
-                  <Typography variant="h6" gutterBottom>Rating Distribution</Typography>
-                  
-                  {reviewStats.distribution.map((item) => (
-                    <Box key={item.stars} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                      <Typography variant="body2" sx={{ width: 20 }}>
-                        {item.stars}
-                      </Typography>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={item.percentage} 
-                        sx={{ mx: 1, flexGrow: 1, height: 8, borderRadius: 1 }} 
-                      />
-                      <Typography variant="body2" sx={{ width: 40 }}>
-                        {item.count}
-                      </Typography>
-                    </Box>
-                  ))}
-                  
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 3 }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <Typography variant="h4" fontWeight="bold">
-                        {reviewStats.average}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        out of {reviewStats.total}
-                      </Typography>
-                    </Box>
-                    <Rating value={reviewStats.average} readOnly precision={0.1} size="large" />
-                  </Box>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="h6">Showing 4 of 20 reviews</Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography variant="body2" sx={{ mr: 1 }}>
-                        Newest
-                      </Typography>
-                      <SortIcon fontSize="small" />
-                    </Box>
-                  </Box>
-                  
-                  <Box sx={{ mb: 3, display: 'flex', alignItems: 'flex-start' }}>
-                    <Box
-                      component="img"
-                      src="https://via.placeholder.com/50"
-                      alt="David Here"
-                      sx={{ width: 50, height: 50, borderRadius: '50%', mr: 2 }}
-                    />
-                    <Box>
-                      <Typography variant="subtitle1" fontWeight="medium">
-                        David Here
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        Jan 4th, 2020
-                      </Typography>
-                      <Rating value={4} readOnly size="small" sx={{ mb: 1 }} />
-                      <Typography variant="body1">
-                        Great book, highly recommend!
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          )}
+          {/* Reviews tab content removed for now */}
+          {/* {activeTab === 'reviews' && (
+                        <Box sx={{ py: 3 }}>
+                            Customer reviews content would go here (if implemented)
+                        </Box>
+                    )} */}
         </Box>
 
-        {/* Related books section */}
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h5" gutterBottom>
-            Related Books
-          </Typography>
-          <Grid container spacing={3}>
-            {relatedBooks.map((book) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={book.id}>
-                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <CardMedia
-                    component="img"
-                    image={book.img}
-                    alt={book.title}
-                    sx={{ height: 200 }}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" component="div">
-                      {book.title}
+        {/* Related books section - Removed for now */}
+        {/* <Box sx={{ mt: 6 }}>
+                    <Typography variant="h5" gutterBottom>
+                        Related Books
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {book.category.join(', ')}
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                      <Rating value={book.rating} readOnly size="small" />
-                      <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                        {book.reviewCount} reviews
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="h6" color="primary">
-                        ${book.price.toFixed(2)}
-                        <Typography variant="caption" component="span" sx={{ textDecoration: 'line-through', ml: 1 }}>
-                          ${book.originalPrice.toFixed(2)}
-                        </Typography>
-                      </Typography>
-                      <Button 
-                        variant="outlined" 
-                        size="small"
-                      >
-                        Add to cart
-                      </Button>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
+                    <Grid container spacing={3}>
+                        {relatedBooks.map((book) => (
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={book.id}>
+                                </Grid>
+                        ))}
+                    </Grid>
+                </Box> */}
       </Container>
       <Footer />
-      <CheckoutForm 
-    open={checkoutOpen}
-    onClose={handleCheckoutClose}
-    book={book}
-    quantity={quantity}
-  />
+      <CheckoutForm
+        open={checkoutOpen}
+        onClose={handleCheckoutClose}
+        book={book}
+        quantity={quantity}
+      />
     </>
   );
 };
 
 export default BookDetail;
-
-// Missing imports that would need to be added at the top
-// import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-// import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
- //import SortIcon from '@mui/icons-material
