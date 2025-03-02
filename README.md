@@ -136,3 +136,15 @@ POST /report: Report inappropriate content or activity.
 - Build a forum page to enable communication between users and admins.
 - Add features for replying to discussions and managing forum posts.
 - Complete testing, bug fixes, and deploy the application to a live hosting environment.
+- 
+### Building and Running
+
+Frotend ->
+- npm install
+- npm run dev
+
+Backend ->
+- composer install
+- php artisan migrate
+- php artisan serve
+
