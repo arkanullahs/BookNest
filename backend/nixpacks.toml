@@ -1,3 +1,0 @@
-[phases.setup]
-nixPkgs = ["composer", "php", "php81Extensions.redis"]
-cmds = ["composer install"]
