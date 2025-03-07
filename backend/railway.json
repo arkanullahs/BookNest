@@ -1,7 +1,7 @@
 {
     "build": {
         "builder": "NIXPACKS",
-        "buildCommand": "composer install --optimize-autoloader --no-dev && php artisan config:cache && php artisan route:cache"
+        "buildCommand": "curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && composer install --optimize-autoloader --no-dev && php artisan config:cache && php artisan route:cache"
     },
     "deploy": {
         "restartPolicyType": "ON_FAILURE",
