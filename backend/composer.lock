@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6291c6f7e2fc4749500dccbdb72fc1cb",
+    "content-hash": "a9239e471b48e24bbb411cfa8dbfa0bf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3333,6 +3333,44 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
+        },
+        {
+            "name": "serverless/vercel_laravel",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/azamat-li/vercel-laravel-configs.git",
+                "reference": "56d8cead561b95f2a1b86501eddbacc4b831e21f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/azamat-li/vercel-laravel-configs/zipball/56d8cead561b95f2a1b86501eddbacc4b831e21f",
+                "reference": "56d8cead561b95f2a1b86501eddbacc4b831e21f",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "serverless\\vercel_laravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "azamat-li",
+                    "email": "azamatalifullstack@gmail.com"
+                }
+            ],
+            "description": "Vercel php configured to be used with Laravel. For making serverless Laravel app with css to be deployed to Vercel.\",",
+            "support": {
+                "issues": "https://github.com/azamat-li/vercel-laravel-configs/issues",
+                "source": "https://github.com/azamat-li/vercel-laravel-configs/tree/master"
+            },
+            "time": "2020-12-23T18:20:28+00:00"
         },
         {
             "name": "stella-maris/clock",
@@ -8319,7 +8357,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "serverless/vercel_laravel": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
