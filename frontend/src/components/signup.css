@@ -21,57 +21,62 @@
   .terms-link:hover {
     text-decoration: underline;
   }
-  .reader-container {
+  .info-container {
     position: absolute;
-    background-color: #f7f7f7;
-    padding: 40px;
-    border-radius: 10px;    
-    width: 100%;
-    max-width: 1000px;
-    margin-right: 40px;
-    text-align: left;
-    left: 150px;
-    top: 200px;
-  }
-  
-  .reader-container h3 {
-    font-size: 40px;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  .publisher-container {
-    position: absolute;
-    background-color: #fff;
-    padding: 40px;
+    top: 30%;
+    left: 10%;
+    transform: translateY(-50%);
+    width: 25%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 350px;
-    margin-right: 40px;
     text-align: center;
-    left: 200px;
-    top: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .publisher-container h3 {
+  .info-container h2 {
     font-size: 20px;
     color: #333;
-    margin-bottom: 20px;
+  }
+  .info-container p {
+    font-size: 20px;
+    color: #333;
+  }
+
+  .welcome-container {
+    position: absolute;
+    top: 70%;
+    left: 10%;
+    transform: translateY(-50%);
+    width: 25%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .join-us-btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #192080;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  .welcome-container h2 {
+    font-size: 20px;
+    color: #333;
   }
-  
-  .join-us-btn:hover {
-    background-color: #0056b3;
+  .welcome-container p {
+    font-size: 20px;
+    color: #333;
+  }
+
+  .bg-image {
+    background-image: url('https://images.theconversation.com/files/45159/original/rptgtpxd-1396254731.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=754&h=502&fit=crop&dpr=1'); /* Update with actual image path */
+    background-size: cover;
+    background-position: left center; /* Aligns image to the left */
+    background-repeat: no-repeat;
+    opacity: 80%;
+    width: 100%;
+    height: 100vh; /* Full height of the viewport */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Ensures it's behind other content */
   }
   
   .signup-container {
@@ -80,7 +85,7 @@
     align-items: center;
     height: 100%; 
     padding: 20px;
-    width: 150%; 
+    width: 250%; 
     position: relative;
     right: -50px; 
     bottom: 80px;
