@@ -12,7 +12,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const endpoint = 'http://127.0.0.1:8000/api/login';
+    const endpoint = 'https://booknest-production-009d.up.railway.app/api/login';
     const payload = { email, password };
 
     try {
