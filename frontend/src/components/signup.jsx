@@ -9,7 +9,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('user');
+  const [role, setRole] = useState('user'); // Default role is "user"
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const Signup = () => {
       return;
     }
 
-    const payload = { name, email, password, role };
+    const payload = { name, email, password, role }; // Send role
     const endpoint = 'http://127.0.0.1:8000/api/register';
 
     try {
@@ -36,7 +36,7 @@ const Signup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/login');
+        navigate('/login'); // Redirect to login after successful signup
       } else {
         setError(data.message || 'Something went wrong!');
       }
@@ -49,20 +49,6 @@ const Signup = () => {
     <div>
       <Navbar />
       <div className="signup-page">
-        <div className="bg-image"></div>
-        
-        <div className="info-container">
-          <h2>Become a BookNest reader</h2>
-          <p>Or join us to publish your own ideas!</p>
-        </div>
-
-        <div className="welcome-container">
-          <h2>Welcome to BookNest – Your Ultimate Reading Destination</h2>
-          <p>At BookNest, we believe that every book has the power to take you on a journey.
-             Whether you’re a passionate reader or just starting to explore the world of literature, we offer a curated collection of books that cater to all tastes and preferences.
-              </p>
-        </div>
-
         <div className="signup-container">
           <div className="signup-form-container">
             <h2>Sign Up</h2>
@@ -78,6 +64,7 @@ const Signup = () => {
                   required
                 />
               </div>
+
               <div className="input-group">
                 <label htmlFor="email">Email</label>
                 <input
@@ -89,6 +76,7 @@ const Signup = () => {
                   required
                 />
               </div>
+
               <div className="input-group">
                 <label htmlFor="password">Password</label>
                 <input
@@ -100,6 +88,7 @@ const Signup = () => {
                   required
                 />
               </div>
+
               <div className="input-group">
                 <label htmlFor="confirm-password">Confirm Password</label>
                 <input
@@ -111,6 +100,7 @@ const Signup = () => {
                   required
                 />
               </div>
+
               <div className="input-group">
                 <label htmlFor="role">Select Role</label>
                 <select id="role" value={role} onChange={(e) => setRole(e.target.value)} required>
@@ -119,9 +109,12 @@ const Signup = () => {
                   <option value="publisher">Publisher</option>
                 </select>
               </div>
+
               {error && <p className="error">{error}</p>}
+
               <button type="submit" className="submit-btn">Sign Up</button>
             </form>
+
             <p className="toggle-text">
               Already have an account? <span onClick={() => navigate('/login')} className="toggle-link">Log in</span>
             </p>
