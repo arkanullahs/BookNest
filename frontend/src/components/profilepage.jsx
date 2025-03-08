@@ -34,6 +34,10 @@ const ProfilePage = () => {
             <span className="detail-text">01742284803</span>
           </li>
           <li>
+            <span className="icon">📍</span>
+            <span className="detail-text">Dhaka, Bangladesh</span>
+          </li>
+          <li>
             <span className="icon">📸</span>
             <span className="detail-text">No Instagram Account Added</span>
           </li>
@@ -46,6 +50,13 @@ const ProfilePage = () => {
             <span className="detail-text">Password</span>
           </li>
         </ul>
+
+        {/* Bio Section */}
+        <div className="bio-section">
+          <h3>Bio</h3>
+          <p className="bio-text">Passionate about technology, coding, and exploring new ideas. Always eager to learn and grow.</p>
+        </div>
+
         <div className="edit-btn-wrapper">
           <button className="edit-profile-btn">Edit Profile</button>
         </div>
