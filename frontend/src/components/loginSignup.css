@@ -1,0 +1,148 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    
+
+  }
+  
+  .form-container {
+    text-align: center;
+    
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .options-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .keep-logged-in {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .keep-logged-in input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+  }
+  
+  .keep-logged-in label {
+    font-size: 14px;
+  }
+  
+  .forgot-password a {
+    font-size: 14px;
+    color: #1b2497;
+    text-decoration: none;
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 12px 16px; /* Adjusted padding for better appearance */
+    font-size: 16px;
+    background-color: #152e64; /* Base color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+  }
+  
+  /* Button Hover Effect */
+  .submit-btn:hover {
+    background-color: #1b2497; /* Hover color */
+    transform: scale(1.05); /* Slight scale effect to make it more interactive */
+  }
+  
+  .toggle-text {
+    margin-top: 15px;
+  }
+  
+  .toggle-link {
+    color: #193286;
+    cursor: pointer;
+  }
+  
+  .toggle-link:hover {
+    text-decoration: underline;
+  }
+  
+  .continue-with {
+    margin-top: 20px;
+  }
+  
+  .continue-with p {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .social-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+  
+  .social-icon:hover {
+    opacity: 0.7;
+  }
+
+  .wave-background{
+    margin-top: 50%;
+  }
+  
+  /* Navigation Bar */
+
+
