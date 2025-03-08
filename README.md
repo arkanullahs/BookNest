@@ -57,20 +57,11 @@ Project Features for BookNest Website
  - Search books by title, author, genre, or ISBN.
  - Advanced filters for language, price range, and ratings.
 
-**Shopping Cart & Wishlist**
+**Shopping Cart & Order**
 
  - Add books to your cart for easy checkout.
- - Save favorite items to a wishlist for future purchases.
+ - User order books.
 
-
- **User Reviews & Ratings**
-
- - Leave reviews and ratings for purchased books.
- - Read feedback from verified buyers.
-
-**Forum Page**
-
-- Provides a platform for users and publishers to communicate, resolve issues, and share feedback about books and reletives.
 
 
 ## API Endpoints
@@ -103,11 +94,6 @@ POST /products/{id}/reviews: Add a review for a product.
 GET /products/{id}/comments: Fetch comments on a specific product.
 POST /products/{id}/comments: Add a comment on a product.
 
-Forum Page
-GET /forum: Fetch all forum discussions.
-POST /forum: Create a new discussion or question.
-GET /forum/{id}: Fetch details of a specific discussion.
-POST /forum/{id}/reply: Add a reply to a forum discussion.
 
 Miscellaneous
 POST /report: Report inappropriate content or activity.
@@ -121,30 +107,67 @@ POST /report: Report inappropriate content or activity.
 - Implement user and publisher authentication (registration and login).
 - Basic UI for sign-up pages, login page, and home page.
 
-- 
 ### Milestone 2: Profile and Administration Features
 - Create API endpoints for product management (add, update, delete).
 - Develop buyer/user profile page to manage personal details.
 - Implement publisher/admin page for managing products (add, edit, delete).
 - Create UI for sales information display in the admin panel.
-- Integrate review and comment features for the product page.
-
-
 
 ### Milestone 3: Forum and Finalization
-
-- Build a forum page to enable communication between users and admins.
-- Add features for replying to discussions and managing forum posts.
+- Complete CI/CD of the project.
 - Complete testing, bug fixes, and deploy the application to a live hosting environment.
-- 
-### Building and Running
 
-Frotend ->
-- npm install
-- npm run dev
+# Usage Instructions:
 
-Backend ->
-- composer install
-- php artisan migrate
-- php artisan serve
+## Prerequisites
+Before getting started, ensure the following tools are installed:
+- **PHP** (for the backend)
+- **Composer** (for managing PHP dependencies)
+- **Node.js** (for running the React frontend)
+- **XAMPP** (for running the MySQL database and backend server)
 
+### Installation Steps
+
+1. **Clone the repository.**
+
+2. **Install necessary dependencies:**
+
+   ## For React Frontend:
+   - npm install
+   - npm install axios
+   - npm install coreui
+   - npm install dayjs
+   - npm install moment
+   - npm install bootstrap
+   - npm install react
+   - npm install react-dom
+   - npm install react-responsive-masonry
+   - npm install react-router-dom
+   - npm install reactstrap
+   - npm install recharts
+   - npm install remixicon
+   - npm install slick-carousel
+   
+   ## For Laravel Backend:
+   - composer install
+   - composer require fruitcake/laravel-cors
+   - Install Laravel Installer globally (optional, but useful for creating Laravel projects quickly):
+   - composer global require laravel/installer
+   - Configure your .env file for both frontend and backend
+
+   ## Run the following Laravel commands to set up your backend:
+   - php artisan storage:link
+   - php artisan vendor:publish
+   - php artisan install:api
+   - php artisan migrate
+   
+## Start the development servers:
+   ### React Frontend:
+   - npm run dev
+
+   ## Laravel Backend:
+   - php artisan serve
+   - Ensure your XAMPP server is running with the MySQL database configured.
+     
+## Accessing the Platform-
+- Once both frontend and backend are running, access the platform via the provided local address.
