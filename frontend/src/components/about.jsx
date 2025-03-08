@@ -11,18 +11,17 @@ function About() {
         <div className="about-content">
           <h1 className="about-title">About BookNest</h1>
           <p className="about-text">
-            Welcome to <span className="highlight">BookNest</span>, your ultimate destination for book enthusiasts! 
-            At BookNest, we believe in the power of stories and the joy of reading. 
-            Our platform offers a curated collection of books across various genres 
-            to cater to readers of all tastes.
+            Welcome to <span className="highlight">BookNest</span>, a sanctuary for book lovers! 
+            We celebrate the magic of storytelling and the joy of reading. 
+            Our carefully curated collection spans across diverse genres, ensuring there's something for everyone.
           </p>
           <p className="about-text">
-            Whether you're looking for timeless classics, the latest bestsellers, 
-            or hidden gems, <span className="highlight">BookNest</span> has it all. Join our community of readers, 
-            share reviews, and embark on a literary journey like no other.
+            Whether you're drawn to timeless classics, the latest bestsellers, 
+            or hidden literary treasures, <span className="highlight">BookNest</span> is your perfect reading companion. 
+            Join our vibrant community, share insights, and embark on an unforgettable literary adventure.
           </p>
           <p className="about-text">
-            <strong>Explore. Discover. Connect.</strong> Welcome to your new book haven!
+            <strong>Explore. Discover. Connect.</strong> Your next great read awaits!
           </p>
         </div>
       </div>
