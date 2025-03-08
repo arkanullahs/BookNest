@@ -52,7 +52,6 @@ const Login = () => {
     <div className="page-wrapper">
       <Navbar />
       <div className="wave-background">
-      <div className="bg-image"></div>
         <div className="container">
           <div className="form-container">
             <h2>Log In</h2>
