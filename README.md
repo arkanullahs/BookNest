@@ -64,39 +64,94 @@ Project Features for BookNest Website
 
 
 
-## API Endpoints
+# API Documentation
 
-API Endpoints
-Authentication
-POST /user/register: Register a new buyer/user.
-POST /publisher/register: Register a new publisher/admin.
-POST /login: User or admin login.
-POST /logout: Logout the authenticated user or admin.
+This document provides information about available API endpoints for the book marketplace application.
 
-Profile
-GET /profile: Fetch the authenticated user's profile details.
-PUT /profile: Update profile details for a buyer or publisher.
+## Authentication
 
-Administration
-GET /admin/products: Fetch all products listed by the admin/publisher.
-POST /admin/products: Add a new product (Admin only).
-PUT /admin/products/{id}: Update product details (Admin only).
-DELETE /admin/products/{id}: Delete a product (Admin only).
-GET /admin/sales: Fetch product sales information (Admin only).
+| Method | Endpoint      | Description                                  | Request Body                                 | Response                            |
+|--------|---------------|----------------------------------------------|----------------------------------------------|-------------------------------------|
+| POST   | `/register`   | Register a new user                          | `name`, `email`, `password`, `role` (optional) | User details with authentication token |
+| POST   | `/login`      | Authenticate a user and get a token          | `email`, `password`                          | Authentication token with user info |
 
-Home Page
-GET /products: Fetch all available products.
-GET /products/{id}: Fetch detailed information for a specific product.
+## Books (Public)
 
-Product Page
-GET /products/{id}/reviews: Fetch reviews for a specific product.
-POST /products/{id}/reviews: Add a review for a product.
-GET /products/{id}/comments: Fetch comments on a specific product.
-POST /products/{id}/comments: Add a comment on a product.
+| Method | Endpoint        | Description                                | Request Body | Response                          |
+|--------|-----------------|--------------------------------------------|--------------|------------------------------------|
+| GET    | `/books`        | Get a list of all published books          | None         | Array of book objects               |
+| GET    | `/books/{book}` | Get detailed information about a book      | None         | Single book object with details     |
 
+## Protected Routes
 
-Miscellaneous
-POST /report: Report inappropriate content or activity.
+All protected routes require a valid JWT authentication token in the request header:
+```
+Authorization: Bearer {your_token}
+```
+
+### Profile
+
+| Method | Endpoint   | Description                 | Request Body | Response                      |
+|--------|------------|-----------------------------|--------------|-------------------------------|
+| GET    | `/profile` | Get current user profile    | None         | User profile information      |
+
+### Admin Routes
+
+*Requires admin role*
+
+| Method | Endpoint           | Description                   | Request Body | Response                      |
+|--------|-------------------|-------------------------------|--------------|-------------------------------|
+| GET    | `/admin/dashboard` | Access the admin dashboard    | None         | Admin dashboard data          |
+
+### Publisher Routes
+
+*Requires publisher role*
+
+| Method | Endpoint                        | Description                                  | Request Body                            | Response                        |
+|--------|--------------------------------|----------------------------------------------|----------------------------------------|----------------------------------|
+| GET    | `/publisher/dashboard`          | Access the publisher dashboard               | None                                     | Publisher dashboard data         |
+| POST   | `/books`                        | Create a new book                            | Book details (title, description, etc.)  | Created book object              |
+| PUT    | `/books/{book}`                 | Update an existing book                      | Updated book details                     | Updated book object              |
+| DELETE | `/books/{book}`                 | Delete a book                                | None                                     | Success message                  |
+| GET    | `/publisher/dashboard/stats`    | Get publisher statistics                     | None                                     | Publisher statistics             |
+| GET    | `/publisher/books`              | Get all books by the publisher               | None                                     | Array of publisher's books       |
+| GET    | `/publisher/earnings`           | Get publisher's earnings information         | None                                     | Earnings data                    |
+| GET    | `/publisher/comments`           | Get comments on publisher's books            | None                                     | Array of comments                |
+
+### User Routes
+
+*Requires user role*
+
+| Method | Endpoint                    | Description                                | Request Body                           | Response                         |
+|--------|-----------------------------|--------------------------------------------|-----------------------------------------|----------------------------------|
+| GET    | `/user/dashboard`           | Access the user dashboard                  | None                                    | User dashboard data              |
+| POST   | `/books/{book}/comments`    | Add a comment to a book                    | `content`, rating                       | Created comment object           |
+| DELETE | `/comments/{comment}`       | Delete a user's comment                    | None                                    | Success message                  |
+| POST   | `/orders`                   | Place a new book order                     | Book ID, quantity, shipping details     | Created order object             |
+| GET    | `/orders`                   | Get user's order history                   | None                                    | Array of order objects           |
+
+## Authentication and Middleware
+
+The API uses JWT (JSON Web Token) authentication and role-based middleware:
+
+- `jwt.auth`: Verifies the authentication token
+- `role:admin`: Ensures the user has admin privileges
+- `role:publisher`: Ensures the user has publisher privileges
+- `role:user`: Ensures the user has standard user privileges
+
+## Response Formats
+
+All API endpoints return responses in JSON format with appropriate HTTP status codes:
+
+- `200 OK`: Request succeeded
+- `201 Created`: Resource created successfully
+- `400 Bad Request`: Invalid request parameters
+- `401 Unauthorized`: Authentication failed or token missing
+- `403 Forbidden`: User does not have required permissions
+- `404 Not Found`: Resource not found
+- `422 Unprocessable Entity`: Validation errors
+- `500 Server Error`: Server-side error
+
 
 
 ## Milestones
@@ -111,63 +166,140 @@ POST /report: Report inappropriate content or activity.
 - Create API endpoints for product management (add, update, delete).
 - Develop buyer/user profile page to manage personal details.
 - Implement publisher/admin page for managing products (add, edit, delete).
-- Create UI for sales information display in the admin panel.
 
-### Milestone 3: Forum and Finalization
+
+### Milestone 3: Testing and Finalization
+- Create UI for sales information display in the admin panel.
 - Complete CI/CD of the project.
 - Complete testing, bug fixes, and deploy the application to a live hosting environment.
 
-# Usage Instructions:
+# Usage Instructions
 
 ## Prerequisites
 Before getting started, ensure the following tools are installed:
-- **PHP** (for the backend)
+- **PHP 8.1+** (for the backend)
 - **Composer** (for managing PHP dependencies)
 - **Node.js** (for running the React frontend)
-- **XAMPP** (for running the MySQL database and backend server)
+- **MySQL** (for the database)
 
-### Installation Steps
+## Installation Steps
 
-1. **Clone the repository.**
+### 1. Clone the repository
+```
+git clone [repository-url]
+cd [project-folder]
+```
 
-2. **Install necessary dependencies:**
+### 2. Backend Setup (Laravel)
 
-   ## For React Frontend:
-   - npm install
-   - npm install axios
-   - npm install coreui
-   - npm install dayjs
-   - npm install moment
-   - npm install bootstrap
-   - npm install react
-   - npm install react-dom
-   - npm install react-responsive-masonry
-   - npm install react-router-dom
-   - npm install reactstrap
-   - npm install recharts
-   - npm install remixicon
-   - npm install slick-carousel
-   
-   ## For Laravel Backend:
-   - composer install
-   - composer require fruitcake/laravel-cors
-   - Install Laravel Installer globally (optional, but useful for creating Laravel projects quickly):
-   - composer global require laravel/installer
-   - Configure your .env file for both frontend and backend
+#### Install Laravel dependencies
+```
+cd backend
+composer install
+```
 
-   ## Run the following Laravel commands to set up your backend:
-   - php artisan storage:link
-   - php artisan vendor:publish
-   - php artisan install:api
-   - php artisan migrate
-   
-## Start the development servers:
-   ### React Frontend:
-   - npm run dev
+#### Create and configure environment file
+```
+cp .env.example .env
+php artisan key:generate
+```
 
-   ## Laravel Backend:
-   - php artisan serve
-   - Ensure your XAMPP server is running with the MySQL database configured.
-     
-## Accessing the Platform-
-- Once both frontend and backend are running, access the platform via the provided local address.
+#### Configure MySQL Database
+1. Create a new MySQL database for your project
+2. Edit the `.env` file with your database credentials:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+#### Set up JWT Authentication
+```
+composer require tymon/jwt-auth
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+```
+
+#### Run migrations
+```
+php artisan migrate
+```
+
+#### Create symbolic link for storage
+```
+php artisan storage:link
+```
+
+#### Start Laravel server
+```
+php artisan serve
+```
+
+### 3. Frontend Setup (React)
+
+#### Install React dependencies
+```
+cd frontend
+npm install
+```
+
+#### Configure frontend environment
+Create or edit `.env` file in the frontend directory to point to your Laravel backend:
+```
+VITE_API_BASE_URL=http://localhost:8000/api
+```
+
+#### Start React development server
+```
+npm run dev
+```
+
+## MySQL Setup for Laravel
+
+### Option 1: Using XAMPP
+1. Install XAMPP from [https://www.apachefriends.org/](https://www.apachefriends.org/)
+2. Start Apache and MySQL services from the XAMPP Control Panel
+3. Access phpMyAdmin at [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+4. Create a new database for your project
+5. Update your Laravel `.env` file with the database credentials
+
+### Option 2: Standalone MySQL Installation
+1. Install MySQL Server from [https://dev.mysql.com/downloads/mysql/](https://dev.mysql.com/downloads/mysql/)
+2. Create a new database using MySQL command line or a GUI tool like MySQL Workbench:
+   ```sql
+   CREATE DATABASE your_database_name;
+   CREATE USER 'your_username'@'localhost' IDENTIFIED BY 'your_password';
+   GRANT ALL PRIVILEGES ON your_database_name.* TO 'your_username'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+3. Update your Laravel `.env` file with these credentials
+
+## Common Laravel & MySQL Commands
+
+### Database Management
+```
+php artisan migrate                   # Run all migrations
+php artisan migrate:fresh             # Drop all tables and re-run migrations
+php artisan migrate:fresh --seed      # Drop, migrate, and seed the database
+php artisan db:seed                   # Run database seeders
+```
+
+### Create Model & Migration
+```
+php artisan make:model ModelName -m   # Create model with migration
+```
+
+### Clear Cache
+```
+php artisan cache:clear               # Clear application cache
+php artisan config:clear              # Clear config cache
+php artisan route:clear               # Clear route cache
+```
+
+## Accessing the Platform
+- Frontend: [http://localhost:5173](http://localhost:5173) (default Vite port)
+- Backend API: [http://localhost:8000/api](http://localhost:8000/api)
+- API Documentation: Available at the `/api-documentation` route
