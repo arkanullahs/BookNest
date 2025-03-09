@@ -211,8 +211,7 @@ DB_PASSWORD=your_password
 
 #### Set up JWT Authentication
 ```
-composer require tymon/jwt-auth
-php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+composer require lcobucci/jwt
 php artisan jwt:secret
 ```
 
