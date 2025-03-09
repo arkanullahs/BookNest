@@ -72,7 +72,7 @@ This document provides information about available API endpoints for the book ma
 
 | Method | Endpoint      | Description                                  | Request Body                                 | Response                            |
 |--------|---------------|----------------------------------------------|----------------------------------------------|-------------------------------------|
-| POST   | `/register`   | Register a new user                          | `name`, `email`, `password`, `role` (optional) | User details with authentication token |
+| POST   | `/register`   | Register a new user                          | `name`, `email`, `password`, `role`           | User details with authentication token |
 | POST   | `/login`      | Authenticate a user and get a token          | `email`, `password`                          | Authentication token with user info |
 
 ## Books (Public)
@@ -93,15 +93,8 @@ Authorization: Bearer {your_token}
 
 | Method | Endpoint   | Description                 | Request Body | Response                      |
 |--------|------------|-----------------------------|--------------|-------------------------------|
-| GET    | `/profile` | Get current user profile    | None         | User profile information      |
+| GET    | `/user-dashboard` | Get current user profile    | None         | User profile information      |
 
-### Admin Routes
-
-*Requires admin role*
-
-| Method | Endpoint           | Description                   | Request Body | Response                      |
-|--------|-------------------|-------------------------------|--------------|-------------------------------|
-| GET    | `/admin/dashboard` | Access the admin dashboard    | None         | Admin dashboard data          |
 
 ### Publisher Routes
 
@@ -109,11 +102,11 @@ Authorization: Bearer {your_token}
 
 | Method | Endpoint                        | Description                                  | Request Body                            | Response                        |
 |--------|--------------------------------|----------------------------------------------|----------------------------------------|----------------------------------|
-| GET    | `/publisher/dashboard`          | Access the publisher dashboard               | None                                     | Publisher dashboard data         |
+| GET    | `/publisher-dashboard`          | Access the publisher dashboard               | None                                     | Publisher dashboard data         |
 | POST   | `/books`                        | Create a new book                            | Book details (title, description, etc.)  | Created book object              |
 | PUT    | `/books/{book}`                 | Update an existing book                      | Updated book details                     | Updated book object              |
 | DELETE | `/books/{book}`                 | Delete a book                                | None                                     | Success message                  |
-| GET    | `/publisher/dashboard/stats`    | Get publisher statistics                     | None                                     | Publisher statistics             |
+| GET    | `/publisher-dashboard/stats`    | Get publisher statistics                     | None                                     | Publisher statistics             |
 | GET    | `/publisher/books`              | Get all books by the publisher               | None                                     | Array of publisher's books       |
 | GET    | `/publisher/earnings`           | Get publisher's earnings information         | None                                     | Earnings data                    |
 | GET    | `/publisher/comments`           | Get comments on publisher's books            | None                                     | Array of comments                |
@@ -124,7 +117,7 @@ Authorization: Bearer {your_token}
 
 | Method | Endpoint                    | Description                                | Request Body                           | Response                         |
 |--------|-----------------------------|--------------------------------------------|-----------------------------------------|----------------------------------|
-| GET    | `/user/dashboard`           | Access the user dashboard                  | None                                    | User dashboard data              |
+| GET    | `/user-dashboard`           | Access the user dashboard                  | None                                    | User dashboard data              |
 | POST   | `/books/{book}/comments`    | Add a comment to a book                    | `content`, rating                       | Created comment object           |
 | DELETE | `/comments/{comment}`       | Delete a user's comment                    | None                                    | Success message                  |
 | POST   | `/orders`                   | Place a new book order                     | Book ID, quantity, shipping details     | Created order object             |
