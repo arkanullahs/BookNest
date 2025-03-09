@@ -13,7 +13,7 @@ const Landingpage = () => {
         <div className="hero-content">
           <h1>Dive into endless stories. Explore now!</h1>
           <p>Discover the magic of books and unlock your imagination.</p>
-          <button className="hero-btn">Start Now</button>
+          <button className="hero-btn">Browse Collection</button>
         </div>
         <div className="hero-image">
           <img
@@ -25,7 +25,7 @@ const Landingpage = () => {
 
       {/* Discover Books Section */}
       <section className="discover-books">
-        <h2>Discover Your Next Book</h2>
+        <h2>Discover Your Next Favorite Book</h2>
         <p>Find books that inspire, teach, and entertain you.</p>
         <div className="book-carousel">
           {[
@@ -81,7 +81,7 @@ const Landingpage = () => {
 
       {/* Featured Authors Section */}
       <section className="featured-authors">
-        <h2>Our Featured Authors</h2>
+        <h2>Meet Our Featured Authors</h2>
         <div className="author-carousel">
           {[
             {
@@ -117,7 +117,7 @@ const Landingpage = () => {
       {/* Testimonials Section */}
       <section className="testimonials">
         <h2>What Our Readers Say</h2>
-        <p>Dive into the experiences of readers who have embraced our collection.</p>
+        <p>Dive into the experiences of readers who love our collection.</p>
         <div className="testimonial-content">
           <img
             src="https://res.cloudinary.com/dgqe5xli6/image/upload/v1737743798/image_9_oi7xbl.png"
@@ -126,7 +126,7 @@ const Landingpage = () => {
           />
           <blockquote>
             <p>
-              "Every book you pick up has its own lesson or lessons, and quite often the bad books have more to teach."
+              "Every book holds a lesson, and sometimes, the bad ones teach us the most."
             </p>
             <div className="stars">⭐⭐⭐⭐⭐</div>
             <footer>- Elizabeth Monterary</footer>
@@ -147,11 +147,9 @@ const Landingpage = () => {
               Subscribe to our newsletter and get <span>-25% off</span>
             </h2>
             <p>
-              Join our community of book lovers! Stay updated on the latest
-              arrivals, special deals, and exclusive offers. Don’t miss out on
-              exciting reads and great savings.
+              Join our book-loving community! Stay updated on new arrivals, exclusive deals, and special offers.
             </p>
-            <button className="newsletter-btn">Get Your Package</button>
+            <button className="newsletter-btn">Claim Your Discount</button>
           </div>
         </div>
       </section>

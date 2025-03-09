@@ -1,0 +1,455 @@
+/* UserDashboard.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  body {
+    background-color: #fffffe;
+    color: #333;
+  }
+  
+
+  
+  .dashboard-wrapper {
+    width: 100%;
+    background-color: #FAF9F6;
+    padding: 20px;
+  }
+  
+  .dashboard-content {
+    display: flex;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background-color: #fff;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .user-welcome {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin-right: 15px;
+    color: #555;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-info span {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .user-info h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+  }
+  
+  .sidebar-menu li {
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 15px;
+    color: #555;
+    border-left: 4px solid transparent;
+  }
+  
+  .sidebar-menu li:hover {
+    background-color: #f8f9fa;
+    color: #3498db;
+  }
+  
+  .sidebar-menu li.active {
+    background-color: #ebf5ff;
+    color: #3498db;
+    border-left: 4px solid #3498db;
+    font-weight: 500;
+  }
+  
+  /* Main Content Styles */
+  .main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #fff;
+    overflow-y: auto;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 24px;
+  }
+  
+  h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 20px 0;
+    color: #333;
+  }
+  
+  .empty-message {
+    color: #777;
+    font-size: 15px;
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  /* Profile Photo Container */
+  .profile-photo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    color: #555;
+    margin-right: 20px;
+  }
+  
+  .upload-photo-btn {
+    background-color: transparent;
+    border: 1px solid #3498db;
+    color: #3498db;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+  
+  .upload-photo-btn:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+  }
+  
+  /* Form Styles */
+  .profile-form, .address-form {
+    width: 100%;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    flex: 1;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.2);
+  }
+  
+  .radio-group {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .radio-label, .checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .radio-label input, .checkbox-label input {
+    margin-right: 8px;
+  }
+  
+  .password-input {
+    position: relative;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .checkbox-group {
+    margin-top: 10px;
+  }
+  
+  .form-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .save-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .save-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .cancel-btn {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.2s;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #e5e5e5;
+  }
+  
+  /* Address Section Styles */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+  
+  .add-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .add-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .addresses-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .address-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .default-address {
+    border-color: #3498db;
+    background-color: #f8f9ff;
+  }
+  
+  .default-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #3498db;
+    color: white;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  
+  .address-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .address-card p {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .address-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .default-btn, .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+  }
+  
+  .default-btn {
+    background-color: transparent;
+    border: 1px solid #3498db;
+    color: #3498db;
+  }
+  
+  .default-btn:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+  }
+  
+  .edit-btn {
+    background-color: transparent;
+    border: 1px solid #555;
+    color: #555;
+  }
+  
+  .edit-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .delete-btn {
+    background-color: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+  }
+  
+  .delete-btn:hover {
+    background-color: rgba(231, 76, 60, 0.05);
+  }
+  
+  .address-form {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 25px;
+    margin-top: 20px;
+  }
+  
+  .no-addresses {
+    text-align: center;
+    padding: 40px 0;
+    color: #777;
+  }
+  
+  /* Generic Sections */
+  .generic-section {
+    width: 100%;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 960px) {
+    .dashboard-content {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .addresses-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .dashboard-wrapper {
+      padding: 0;
+    }
+    
+    .dashboard-content {
+      border-radius: 0;
+      box-shadow: none;
+    }
+    
+    .main-content {
+      padding: 20px 15px;
+    }
+    
+    .profile-photo-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .profile-photo {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
+    
+    .section-header {
+      flex-direction: column;
+      gap: 15px;
+      align-items: flex-start;
+    }
+  }
