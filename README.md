@@ -295,4 +295,3 @@ php artisan route:clear               # Clear route cache
 ## Accessing the Platform
 - Frontend: [http://localhost:5173](http://localhost:5173) (default Vite port)
 - Backend API: [http://localhost:8000/api](http://localhost:8000/api)
-- API Documentation: Available at the `/api-documentation` route
